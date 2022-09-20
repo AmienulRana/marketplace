@@ -9,7 +9,7 @@
         name:"Button",
         props: {
             text:String, 
-        }
+        },
     }
 </script>
 
