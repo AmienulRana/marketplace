@@ -1,6 +1,6 @@
 <template>
-    <div class="relative">
-        <img src="../../../assets/image/banner.png" alt="banner png" class="w-full object-cover rounded-xl" />
+    <div class="relative h-80">
+        <img src="../../../assets/image/banner.png" alt="banner png" class="w-full h-full object-cover rounded-xl" />
         <div class="absolute top-24 left-12">
             <h1 class="text-4xl font-semibold mb-3.5 text-brown-500">Discount 50% Off <br /> All Members</h1>
             <p class="text-brown-500">
