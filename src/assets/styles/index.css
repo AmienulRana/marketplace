@@ -4,10 +4,19 @@
 
 body {
   padding: 0px 100px;
+  overflow-x: hidden;
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
 }
 
-@media only screen and (max-width: 600px) {
+@media (max-width: 767px) {
   body {
-    padding: 0 30px;
+    padding: 0 25px !important;
+  }
+}
+@media (min-width: 769px) and (max-width: 1023px) {
+  body {
+    padding: 0 25px !important;
   }
 }
