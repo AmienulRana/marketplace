@@ -4,7 +4,6 @@
       flex
       justify-center
       rounded-md
-      font-bold
       text-base
       items-center
       text-white
