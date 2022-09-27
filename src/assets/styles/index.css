@@ -1,22 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  padding: 0px 100px;
-  overflow-x: hidden;
+html {
+  font-family: "Poppins", sans-serif;
 }
 .scrollbar-hidden::-webkit-scrollbar {
   display: none;
 }
 
-@media (max-width: 767px) {
-  body {
-    padding: 0 25px !important;
-  }
-}
-@media (min-width: 769px) and (max-width: 1023px) {
-  body {
-    padding: 0 25px !important;
-  }
+.linear-gradient-custom {
+  background: linear-gradient(
+    270deg,
+    rgba(255, 113, 88, 0.32) 2%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }

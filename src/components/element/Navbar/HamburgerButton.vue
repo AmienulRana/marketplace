@@ -30,15 +30,7 @@
         "
       ></span>
       <span
-        class="
-          w-full
-          block
-          h-1
-          bg-green-500
-          rounded-xl
-          ease-in-out
-          duration-300
-        "
+        class="w-1/2 block h-1 bg-green-500 rounded-xl ease-in-out duration-300"
       ></span>
       <span
         class="
