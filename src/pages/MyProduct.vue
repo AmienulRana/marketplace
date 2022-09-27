@@ -1,6 +1,8 @@
 <template>
   <Layout title="My Products" text="Manage it well and get money">
-    <Button text="Add new Product" class="mb-8" />
+    <router-link to="/add-product">
+      <Button text="Add new Product" class="mb-8" />
+    </router-link>
     <section class="lg:grid-cols-4 md:grid-cols-3 grid-cols-2 grid gap-4">
       <div
         class="w-full p-3 rounded-lg bg-white"
