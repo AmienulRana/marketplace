@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <Layout title="Dashboard" text="Look what you have made today!">
     <section class="sm:grid-cols-3 grid mb-6">
       <div class="md:h-32 sm:w-11/12 bg-white mb-2 w-full rounded-xl p-6">
         <p class="text-grey-600">Customer</p>
@@ -23,7 +23,7 @@
 
 <script>
 import Layout from "../components/Layout/Dashboard.vue";
-import RowTransaction from "../components/organism/RowTansaction.vue";
+import RowTransaction from "../components/organism/RowTransaction.vue";
 export default {
   name: "Dahsboard",
   components: { Layout, RowTransaction },
