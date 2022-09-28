@@ -24,6 +24,7 @@
           p-2
           shadow-lg
           rounded-lg
+          bg-white
         "
       >
         <div
