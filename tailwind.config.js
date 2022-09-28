@@ -7,6 +7,7 @@ module.exports = {
         "green-400": "#29A867",
         "green-500": "#29A867",
         "orange-500": "#FF7158",
+        "orange-600": "#F44336",
         "blue-500": "#0C0D36",
         "brown-500": "#533529",
         "grey-400": "#F3F3F3",
