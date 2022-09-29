@@ -1,7 +1,7 @@
 <template>
   <Layout>
-    <section class="md:px-16 grid grid-cols-2 gap-6 my-16">
-      <img src="../assets/image/imgLogin.png" class="w-80" />
+    <section class="lg:px-16 md:px-8 grid grid-cols-2 gap-6 my-16">
+      <img src="../assets/image/imgLogin.png" class="w-80 md:block hidden" />
       <div class="">
         <h1 class="text-blue-500 mb-6 text-3xl">
           Belanja kebutuhan utama, menjadi lebih mudah
