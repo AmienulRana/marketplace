@@ -8,6 +8,7 @@ import MyProduct from "../pages/MyProduct.vue";
 import MyAccount from "../pages/MyAccount.vue";
 import StoreSetting from "../pages/StoreSetting.vue";
 import AddProduct from "../pages/AddProduct.vue";
+import Login from "../pages/Login.vue";
 const routes = [
   { path: "/", component: Home },
   { path: "/404", component: NotFound },
@@ -18,6 +19,7 @@ const routes = [
   { path: "/settings", component: StoreSetting },
   { path: "/my-account", component: MyAccount },
   { path: "/add-product", component: AddProduct },
+  { path: "/login", component: Login },
   {
     path: "/:catchAll(.*)",
     redirect: "/404",
