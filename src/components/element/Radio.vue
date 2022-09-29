@@ -6,6 +6,7 @@
       name="status"
       class="opacity-0 absolute top-0"
       :id="id"
+      @change="$emit('change')"
     />
     <div
       class="
@@ -30,6 +31,7 @@ export default {
     label: { type: String, required: true },
     id: String,
   },
+  emits: ["change"],
 };
 </script>
 
