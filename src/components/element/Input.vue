@@ -2,7 +2,7 @@
   <div>
     <label class="text-blue-500">{{ label }}</label>
     <input
-      type="text"
+      :type="type"
       class="
         w-full
         bg-grey-400
@@ -24,6 +24,10 @@ export default {
   name: "Input",
   props: {
     label: String,
+    type: {
+      type: String,
+      default: "text",
+    },
   },
 };
 </script>
