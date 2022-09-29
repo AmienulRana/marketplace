@@ -10,9 +10,10 @@ import StoreSetting from "../pages/StoreSetting.vue";
 import AddProduct from "../pages/AddProduct.vue";
 import Login from "../pages/Login.vue";
 import Register from "../pages/Register.vue";
+import RegisterSuccess from "../pages/RegisterSuccess.vue";
+
 const routes = [
   { path: "/", component: Home },
-  { path: "/404", component: NotFound },
   { path: "/detail/:id", component: Detail },
   { path: "/dashboard", component: Dashboard },
   { path: "/transactions", component: Transactions },
@@ -22,9 +23,10 @@ const routes = [
   { path: "/add-product", component: AddProduct },
   { path: "/login", component: Login },
   { path: "/register", component: Register },
+  { path: "/register-success", component: RegisterSuccess },
   {
     path: "/:catchAll(.*)",
-    redirect: "/404",
+    component: NotFound,
     meta: {
       requiresAuth: false,
     },
