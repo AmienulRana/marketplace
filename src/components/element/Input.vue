@@ -3,6 +3,7 @@
     <label class="text-blue-500">{{ label }}</label>
     <input
       :type="type"
+      :value="modelValue"
       class="
         w-full
         bg-grey-400
@@ -15,6 +16,7 @@
         rounded-md
         mt-1.5
       "
+      @input="$emit('update:modelValue', $event.target.value)"
     />
   </div>
 </template>
@@ -28,7 +30,12 @@ export default {
       type: String,
       default: "text",
     },
+    modelValue: {
+      type: String,
+      default: "",
+    },
   },
+  emits: ["update:modelValue"],
 };
 </script>
 
