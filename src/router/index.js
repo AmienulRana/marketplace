@@ -11,7 +11,7 @@ import AddProduct from "../pages/AddProduct.vue";
 import Login from "../pages/Login.vue";
 import Register from "../pages/Register.vue";
 import RegisterSuccess from "../pages/RegisterSuccess.vue";
-
+import Cart from "../pages/Cart.vue";
 const routes = [
   { path: "/", component: Home },
   { path: "/detail/:id", component: Detail },
@@ -24,6 +24,7 @@ const routes = [
   { path: "/login", component: Login },
   { path: "/register", component: Register },
   { path: "/register-success", component: RegisterSuccess },
+  { path: "/cart", component: Cart },
   {
     path: "/:catchAll(.*)",
     component: NotFound,
