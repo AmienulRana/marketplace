@@ -21,7 +21,7 @@ const routes = [
   { path: "/settings", component: StoreSetting },
   { path: "/my-account", component: MyAccount },
   { path: "/add-product", component: AddProduct },
-  { path: "/login", component: Login },
+  { path: "/login", component: Login, name: "login" },
   { path: "/register", component: Register },
   { path: "/register-success", component: RegisterSuccess },
   { path: "/cart", component: Cart },
