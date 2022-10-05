@@ -32,9 +32,13 @@
           label="Iya, boleh"
           id="iya"
           class="mr-5"
-          @change="changeValueStore"
+          @change="openAStore = true"
         />
-        <Radio label="Enggak, makasih" id="tidak" @change="changeValueStore" />
+        <Radio
+          label="Enggak, makasih"
+          id="tidak"
+          @change="openAStore = false"
+        />
       </div>
       <template v-if="openAStore">
         <Input
@@ -68,6 +72,10 @@ import Input from "../components/element/Input.vue";
 import Button from "../components/element/Button.vue";
 import Select from "../components/element/Select.vue";
 import Radio from "../components/element/Radio.vue";
+import axios from "axios";
+import { useToast } from "vue-toastification";
+import CONFIG from "../config";
+
 export default {
   name: "StoreSetting",
   components: { Layout, Input, Button, Radio, Select },
@@ -82,15 +90,14 @@ export default {
       nama_toko: "",
     };
   },
+  setup() {
+    // Get toast interface
+    const toast = useToast();
+
+    return { toast };
+  },
   methods: {
-    changeValueStore() {
-      if (!this.openAStore) {
-        this.nama_toko = "";
-        this.category = "";
-      }
-      this.openAStore = this.openAStore ? false : true;
-    },
-    handleToRegister() {
+    async handleToRegister() {
       const data = {
         fullname: this.fullname,
         email: this.email,
@@ -99,7 +106,18 @@ export default {
         category: this.category,
         nama_toko: this.nama_toko,
       };
-      console.log(data);
+      const { URL_API } = CONFIG;
+      try {
+        const response = await axios.post(`${URL_API}/user/register`, {
+          ...data,
+        });
+        const { message } = response.data;
+        this.toast.success(message);
+        this.$router.push({ name: "login" });
+      } catch (err) {
+        const { message } = err.response.data;
+        this.toast.error(message);
+      }
     },
   },
 };
