@@ -13,7 +13,7 @@ import Register from "../pages/Register.vue";
 import RegisterSuccess from "../pages/RegisterSuccess.vue";
 import Cart from "../pages/Cart.vue";
 const routes = [
-  { path: "/", component: Home },
+  { path: "/", component: Home, name: "index" },
   { path: "/detail/:id", component: Detail },
   { path: "/dashboard", component: Dashboard },
   { path: "/transactions", component: Transactions },
