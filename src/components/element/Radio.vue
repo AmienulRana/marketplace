@@ -2,11 +2,12 @@
   <label class="flex items-center my-3.5 relative cursor-pointer" :for="id">
     <input
       type="radio"
-      :value="label"
+      :value="modelValue"
       name="status"
       class="opacity-0 absolute top-0"
       :id="id"
-      @change="$emit('change')"
+      @change="$emit('change', e.target.value)"
+      :checked="checked"
     />
     <div
       class="
@@ -30,6 +31,7 @@ export default {
   props: {
     label: { type: String, required: true },
     id: String,
+    checked: Boolean,
   },
   emits: ["change"],
 };
