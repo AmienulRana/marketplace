@@ -16,7 +16,8 @@
         rounded-md
         mt-1.5
       "
-      @input="$emit('update:modelValue', $event.target.value)"
+      @input="$emit('update:modelValue', $event.target.value, $event)"
+      @keydown="$emit('keydown:modelValue', $event.target.value, $event)"
     />
   </div>
 </template>
@@ -35,7 +36,7 @@ export default {
       default: "",
     },
   },
-  emits: ["update:modelValue"],
+  emits: ["update:modelValue", "keydown:modelValue"],
 };
 </script>
 
