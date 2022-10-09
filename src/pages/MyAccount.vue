@@ -26,7 +26,7 @@ import Input from "../components/element/Input.vue";
 import Select from "../components/element/Select.vue";
 import Radio from "../components/element/Radio.vue";
 import Button from "../components/element/Button.vue";
-import jwt_decode from "jwt-decode";
+import decodeJwtToken from "../utils/jwtDecode";
 
 export default {
   name: "StoreSetting",
@@ -41,13 +41,9 @@ export default {
 
   methods: {},
   mounted() {
-    const decodeJwtToken = () => {
-      const token = localStorage.getItem("token");
-      const { fullname, email } = jwt_decode(token);
-      this.fullname = fullname;
-      this.email = email;
-    };
-    decodeJwtToken();
+    const { fullname, email } = decodeJwtToken();
+    this.fullname = fullname;
+    this.email = email;
   },
 };
 </script>
