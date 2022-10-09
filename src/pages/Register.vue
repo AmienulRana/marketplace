@@ -77,7 +77,7 @@ import { useToast } from "vue-toastification";
 import CONFIG from "../config";
 
 export default {
-  name: "StoreSetting",
+  name: "Register",
   components: { Layout, Input, Button, Radio, Select },
   data() {
     return {
