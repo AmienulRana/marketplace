@@ -7,9 +7,22 @@
           Belanja kebutuhan utama, menjadi lebih mudah
         </h1>
         <div class="w-4/5">
-          <Input label="Email Address" class="mb-3.5" />
-          <Input label="Password" type="password" />
-          <Button text="Sign In to My Account" class="mt-7 mb-3.5 w-full" />
+          <form @submit="handleToLogin">
+            <Input
+              label="Email Address"
+              class="mb-3.5"
+              type="email"
+              :modelValue="email"
+              @update:modelValue="(newValue) => (email = newValue)"
+            />
+            <Input
+              label="Password"
+              type="password"
+              :modelValue="password"
+              @update:modelValue="(newValue) => (password = newValue)"
+            />
+            <Button text="Sign In to My Account" class="mt-7 mb-3.5 w-full" />
+          </form>
           <router-link to="/register">
             <Button text="Sign up" class="bg-grey-500 text-grey-700 w-full" />
           </router-link>
@@ -23,13 +36,52 @@
 import Layout from "../components/Layout";
 import Input from "../components/element/Input.vue";
 import Button from "../components/element/Button.vue";
+import CONFIG from "../config";
+import { useToast } from "vue-toastification";
+import axios from "axios";
+
 export default {
-  name: "StoreSetting",
+  name: "Login",
   components: { Layout, Input, Button },
   data() {
     return {
-      options: ["Funiture", "Baby", "Tools", "Gadgets"],
+      email: "",
+      password: "",
+      loading: false,
     };
+  },
+  setup() {
+    // Get toast interface
+    const toast = useToast();
+
+    return { toast };
+  },
+  methods: {
+    async handleToLogin(event) {
+      event.preventDefault();
+      console.log(this.loading);
+      const data = {
+        email: this.email,
+        password: this.password,
+      };
+      const { URL_API } = CONFIG;
+      try {
+        if (!this.loading) {
+          const response = await axios.post(`${URL_API}/user/login`, {
+            ...data,
+          });
+          const { message, token } = response?.data;
+          this.toast.success(message);
+          localStorage.setItem("token", token);
+          this.$router.push({ name: "index" });
+        }
+      } catch (err) {
+        this.loading = true;
+        const { message } = err?.response?.data;
+        this.toast.error(message);
+        setTimeout(() => (this.loading = false), 3000);
+      }
+    },
   },
 };
 </script>
