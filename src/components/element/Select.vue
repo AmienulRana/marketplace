@@ -14,8 +14,10 @@
         rounded-md
         mt-1.5
       "
+      :value="modelValue"
+      @change="$emit('update:modelValue', $event.target.value)"
     >
-      <option v-for="option in options" :key="option">
+      <option v-for="option in options" :key="option" :value="option">
         {{ option }}
       </option>
     </select>
@@ -28,7 +30,9 @@ export default {
   props: {
     label: String,
     options: [],
+    modelValue: String | Boolean,
   },
+  emits: ["update:modelValue"],
 };
 </script>
 
