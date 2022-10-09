@@ -15,10 +15,12 @@
     "
     :class="showSidebar ? 'translateX-0-custom' : '-translateX-full-custom'"
   >
-    <img
-      src="../../assets/icons/logo.svg"
-      class="w-16 h-20 block m-auto mt-9 mb-16"
-    />
+    <router-link to="/">
+      <img
+        src="../../assets/icons/logo.svg"
+        class="w-16 h-20 block m-auto mt-9 mb-16"
+      />
+    </router-link>
     <ul>
       <li
         v-for="(data, i) in dataSidebar"
