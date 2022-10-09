@@ -27,7 +27,7 @@
             : '-translateY-full-custom opacity-100 -z-10'
         "
       >
-        <ul class="flex sm:flex-row flex-col items-center">
+        <ul class="md:flex-row flex flex-col items-center">
           <li :class="getNavbarActive('/')">
             <router-link to="/">Home</router-link>
           </li>
@@ -37,13 +37,27 @@
           <li :class="getNavbarActive('/redward')">
             <router-link to="/redward">Redward</router-link>
           </li>
-          <li :class="getNavbarActive('/signup')">
-            <router-link to="/signup">Sign up</router-link>
-          </li>
+          <template v-if="isLogin">
+            <li :class="getNavbarActive('/register')">
+              <router-link to="/register">Sign up</router-link>
+            </li>
+            <li>
+              <router-link to="/login">
+                <Button text="Sign in" />
+              </router-link>
+            </li>
+          </template>
+          <template v-else>
+            <li>
+              <NavbarLogin class="md:block hidden" />
+            </li>
+          </template>
         </ul>
-        <Button text="Sign in" />
       </div>
-      <HamburgerButton @click="handleShowNavbar" />
+      <div class="md:hidden flex items-center">
+        <NavbarLogin class="md:hidden mr-6" />
+        <HamburgerButton @click="handleShowNavbar" />
+      </div>
     </nav>
   </header>
 </template>
@@ -51,21 +65,24 @@
 <script>
 import Button from "../Button.vue";
 import HamburgerButton from "./HamburgerButton.vue";
+import NavbarLogin from "./NavbarLogin.vue";
 export default {
   name: "Navbar",
   data() {
     return {
       showNavbar: false,
+      isLogin: false,
     };
   },
   components: {
     Button,
     HamburgerButton,
+    NavbarLogin,
   },
   methods: {
     getNavbarActive(name) {
       let classNavbar = "md:mb-0 md:mr-7 mb-6 ";
-      if (name === "/") {
+      if (name === this.$route.path) {
         return (classNavbar += "text-orange-500 font-bold");
       }
       return (classNavbar += "text-blue-500");
@@ -74,7 +91,12 @@ export default {
       this.showNavbar = this.showNavbar ? false : true;
     },
   },
-  computed: {},
+  computed: {
+    showIsLogin() {
+      const token = localStorage.getItem("token");
+      this.isLogin = token ? true : false;
+    },
+  },
 };
 </script>
 
