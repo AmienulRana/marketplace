@@ -1,9 +1,70 @@
 <template>
   <Layout title="Store Settings" text="Make store that profitable">
-    <section class="bg-white rounded-lg h-4/5 w-full p-10 relative">
+    <section class="bg-white rounded-lg h-auto w-full p-10 relative">
       <div class="md:grid-cols-2 grid gap-4 grid-cols-1 mb-6">
         <Input label="Store Name" />
         <Select label="Category" :options="options" />
+      </div>
+      <div class="grid grid-cols-1 mb-6">
+        <div class="relative">
+          <Input
+            label="Your Location*"
+            :modelValue="address.location"
+            @update:modelValue="
+              (newValue, event) => searchPlace(newValue, event)
+            "
+          />
+          <div
+            class="
+              absolute
+              top-full
+              rounded-md
+              left-0
+              w-full
+              bg-white
+              py-2
+              shadow-lg
+              overflow-y-scroll
+              max-h-44
+            "
+            v-if="query.length > 0"
+          >
+            <template v-if="query.length < 3">
+              <Loading />
+            </template>
+            <p
+              v-if="locationsPrediction.length < 1 && query.length >= 3"
+              class="text-red-400 px-6"
+            >
+              404 : Sorry the location you are looking for is not in our disytem
+            </p>
+            <p
+              class="
+                mb-0
+                cursor-pointer
+                px-6
+                text-grey-600
+                mb-4
+                hover:bg-grey-500
+              "
+              v-for="prediction in locationsPrediction"
+              :key="prediction._id"
+              @click="handleSelectLocation(prediction)"
+            >
+              <font-awesome-icon icon="fa-location-dot" class="mr-2" />
+              {{ prediction?.nama_lokasi }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="md:grid-cols-2 grid gap-3 grid-cols-1 mb-6">
+        <Input label="Province*" :modelValue="address.province" />
+        <!-- <Input label="City*" :modelValue="address.city" /> -->
+        <Input label="Postal Code*" :modelValue="address.postalCode" />
+      </div>
+      <div class="md:grid-cols-2 grid gap-4 grid-cols-1 mb-6">
+        <Input label="Country*" :modelValue="country" />
+        <Input label="Mobile*" />
       </div>
       <label class="text-blue-500"> Store Status </label>
       <p class="text-grey-600">Apakah saat ini toko Anda buka?</p>
@@ -11,7 +72,9 @@
         <Radio label="Buka" id="buka" class="mr-5" />
         <Radio label="Sementara tutup" id="tutup" />
       </div>
-      <Button class="absolute bottom-10 right-10" text="Save now" />
+      <div class="flex justify-end">
+        <Button text="Save now" @click="handleEditStore" />
+      </div>
     </section>
   </Layout>
 </template>
@@ -22,13 +85,105 @@ import Input from "../components/element/Input.vue";
 import Select from "../components/element/Select.vue";
 import Radio from "../components/element/Radio.vue";
 import Button from "../components/element/Button.vue";
+import CONFIG from "../config";
+import Loading from "../components/element/Loading.vue";
+import axios from "axios";
+import { useToast } from "vue-toastification";
+
 export default {
   name: "StoreSetting",
-  components: { Layout, Input, Select, Radio, Button },
+  components: { Layout, Input, Select, Radio, Button, Loading },
   data() {
     return {
       options: ["Funiture", "Baby", "Tools", "Gadgets"],
+      query: "",
+      locations: [],
+      locationsPrediction: [],
+      address: {
+        province: "",
+        postalCode: "",
+        province_id: "",
+        city_id: "",
+        location: "",
+      },
+      country: "Indonesia",
+      mobile_phone: "",
     };
+  },
+  setup() {
+    // Get toast interface
+    const toast = useToast();
+
+    return { toast };
+  },
+  methods: {
+    searchPlace(newValue, event) {
+      this.query = newValue;
+
+      if (this.query.length >= 3) {
+        const searchLocation = this.locations.filter((location) =>
+          location.nama_lokasi.toLowerCase().includes(this.query)
+        );
+
+        this.locationsPrediction = searchLocation;
+      } else {
+        this.locationsPrediction = [];
+      }
+    },
+    handleSelectLocation(location) {
+      this.locationsPrediction = [];
+      this.query = "";
+
+      const { provinsi, postal_code, nama_lokasi, id_lokasi, id_provinsi } =
+        location;
+      this.address.province = provinsi;
+      this.address.postalCode = postal_code;
+      this.address.location = nama_lokasi;
+      this.address.city_id = id_lokasi;
+      this.address.province_id = id_provinsi;
+    },
+    async handleEditStore() {
+      const {
+        fullname,
+        email,
+        address: { province, postalCode, location, city_id, province_id },
+        mobile_phone,
+      } = this;
+
+      const options = {
+        url: `${CONFIG.URL_API}/store`,
+        method: "put",
+        headers: {
+          Authorization: `Bearer ${CONFIG.token}`,
+        },
+        data: {
+          fullname,
+          email,
+          address: { province, postalCode, location, city_id, province_id },
+          mobile_phone,
+        },
+      };
+      try {
+        const response = await axios(options);
+        this.toast.success(response.data.message);
+      } catch (err) {
+        this.toast.error(err.response.data.message);
+      }
+      // console.log(this.address);
+    },
+  },
+  mounted() {
+    const getLocation = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:4000/api/v1/location"
+        );
+        this.locations = response.data;
+      } catch (err) {
+        this.toast.error("Gagal mengambil Lokasi, silahkan hubungi developer");
+      }
+    };
+    getLocation();
   },
 };
 </script>
