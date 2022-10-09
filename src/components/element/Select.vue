@@ -17,7 +17,12 @@
       :value="modelValue"
       @change="$emit('update:modelValue', $event.target.value)"
     >
-      <option v-for="option in options" :key="option" :value="option">
+      <option
+        v-for="option in options"
+        :key="option"
+        :value="option"
+        :selected="modelValue === option"
+      >
         {{ option }}
       </option>
     </select>
