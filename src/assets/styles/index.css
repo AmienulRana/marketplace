@@ -9,7 +9,14 @@ html {
 .scrollbar-hidden::-webkit-scrollbar {
   display: none;
 }
-
+.Vue-Toastification__toast--success {
+  background: #29a867 !important;
+  font-family: "Poppins", sans-serif !important;
+}
+.Vue-Toastification__toast--error {
+  font-family: "Poppins", sans-serif !important;
+  background: #f32355 !important;
+}
 .linear-gradient-custom {
   background: linear-gradient(
     270deg,
