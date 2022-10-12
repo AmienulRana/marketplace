@@ -30,6 +30,9 @@
       >
         <router-link :to="data.to">{{ data.name }}</router-link>
       </li>
+      <li class="mb-6 py-1.5 pl-3 block cursor-pointer" @click="handleLogout">
+        Logout
+      </li>
     </ul>
   </div>
 </template>
@@ -54,6 +57,13 @@ export default {
       if (this.$route.path === path) {
         return "duration-200 ease-in linear-gradient-custom font-bold border-r-4 border-orange-500";
       }
+    },
+    handleLogout() {
+      localStorage.removeItem("token");
+      this.$store.commit("removeTheToken");
+      // this.$router.go(0);
+      // this.$router.push({ name: "login" });
+      window.location.href = "/#/login";
     },
   },
 };
