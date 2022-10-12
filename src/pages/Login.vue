@@ -72,6 +72,7 @@ export default {
           });
           const { message, token } = response?.data;
           this.toast.success(message);
+          this.$store.commit("storeTheToken", token);
           localStorage.setItem("token", token);
           this.$router.push({ name: "index" });
         }
