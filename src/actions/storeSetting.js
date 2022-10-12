@@ -1,9 +1,26 @@
 import CONFIG from "../config";
 import axios from "axios";
-export const getMyStoreAPI = async () => {
+
+export const configOptionsAPI = (method, stateToken, payload) => {
+  const token = stateToken || CONFIG.token;
+  const options = {
+    url: `${CONFIG.URL_API}/store`,
+    method: method,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: {
+      ...payload,
+    },
+  };
+  return options;
+};
+
+export const getMyStoreAPI = async ({ token: stateToken }) => {
+  const token = stateToken || CONFIG.token;
   try {
     const response = await axios.get(`${CONFIG.URL_API}/store`, {
-      headers: { Authorization: `Bearer ${CONFIG.token}` },
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response?.data;
   } catch (error) {
@@ -11,21 +28,13 @@ export const getMyStoreAPI = async () => {
   }
 };
 
-export const editMyStoreAPI = async (payload) => {
-  const options = {
-    url: `${CONFIG.URL_API}/store`,
-    method: "put",
-    headers: {
-      Authorization: `Bearer ${CONFIG.token}`,
-    },
-    data: {
-      ...payload,
-    },
-  };
+export const editMyStoreAPI = async (payload, { token: stateToken }) => {
+  const options = configOptionsAPI("put", stateToken, payload);
+
   try {
     const response = await axios(options);
-    return response?.data;
+    return response;
   } catch (error) {
-    return error.response.data;
+    return error.response;
   }
 };
