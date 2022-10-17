@@ -14,6 +14,8 @@
       resize-none
     "
     rows="4"
+    :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)"
   >
   </textarea>
 </template>
@@ -21,7 +23,8 @@
 <script>
 export default {
   name: "Textarea",
-  props: { label: String },
+  props: { label: String, modelValue: String },
+  emits: ["update:modelValue"],
 };
 </script>
 
