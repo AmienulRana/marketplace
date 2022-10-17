@@ -48,14 +48,7 @@
               404 : Sorry the location you are looking for is not in our disytem
             </p>
             <p
-              class="
-                mb-0
-                cursor-pointer
-                px-6
-                text-grey-600
-                mb-4
-                hover:bg-grey-500
-              "
+              class="cursor-pointer px-6 text-grey-600 mb-4 hover:bg-grey-500"
               v-for="prediction in locationsPrediction"
               :key="prediction._id"
               @click="handleSelectLocation(prediction)"
