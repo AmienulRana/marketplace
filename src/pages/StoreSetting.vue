@@ -3,7 +3,7 @@
     <section class="bg-white rounded-lg h-auto w-full p-10 relative">
       <div class="md:grid-cols-2 grid gap-4 grid-cols-1 mb-6">
         <Input
-          label="Store Name"
+          label="Store Name*"
           :modelValue="store_name"
           @update:modelValue="(newValue) => (store_name = newValue)"
         />
