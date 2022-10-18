@@ -22,6 +22,13 @@
           :modelValue="category"
           @update:modelValue="(newValue) => (category = newValue)"
         />
+        <Input
+          type="number"
+          label="Stok"
+          class="mb-6"
+          :modelValue="stok"
+          @update:modelValue="(newValue) => (stok = newValue)"
+        />
         <Textarea
           label="Description"
           :modelValue="description"
@@ -75,6 +82,7 @@ export default {
       description: "",
       options: ["Funiture", "Baby", "Tools", "Gadgets"],
       category: "",
+      stok: 0,
       images: [],
     };
   },
@@ -90,6 +98,7 @@ export default {
       fd.append("deskripsi", this.description);
       fd.append("harga_product", this.price);
       fd.append("category", this.category);
+      fd.append("stok", this.stok);
 
       const response = await addProductAPI(fd, {
         token: this.$store.state.token,
