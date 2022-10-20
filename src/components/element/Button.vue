@@ -11,6 +11,7 @@
       py-2.5
       px-8
     "
+    :disabled="disabled"
   >
     {{ text }}
   </button>
@@ -21,6 +22,7 @@ export default {
   name: "Button",
   props: {
     text: String,
+    disabled: Boolean,
   },
 };
 </script>
