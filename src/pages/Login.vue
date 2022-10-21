@@ -21,7 +21,11 @@
               :modelValue="password"
               @update:modelValue="(newValue) => (password = newValue)"
             />
-            <Button text="Sign In to My Account" class="mt-7 mb-3.5 w-full" />
+            <Button
+              text="Sign In to My Account"
+              class="mt-7 mb-3.5 w-full"
+              :disabled="loading"
+            />
           </form>
           <router-link to="/register">
             <Button text="Sign up" class="bg-grey-500 text-grey-700 w-full" />
@@ -59,25 +63,23 @@ export default {
   methods: {
     async handleToLogin(event) {
       event.preventDefault();
-      console.log(this.loading);
+      this.loading = true;
       const data = {
         email: this.email,
         password: this.password,
       };
       const { URL_API } = CONFIG;
       try {
-        if (!this.loading) {
-          const response = await axios.post(`${URL_API}/user/login`, {
-            ...data,
-          });
-          const { message, token } = response?.data;
-          this.toast.success(message);
-          this.$store.commit("storeTheToken", token);
-          localStorage.setItem("token", token);
-          this.$router.push({ name: "index" });
-        }
+        const response = await axios.post(`${URL_API}/user/login`, {
+          ...data,
+        });
+        const { message, token } = response?.data;
+        this.loading = false;
+        this.toast.success(message);
+        this.$store.commit("storeTheToken", token);
+        localStorage.setItem("token", token);
+        this.$router.push({ name: "index" });
       } catch (err) {
-        this.loading = true;
         const { message } = err?.response?.data;
         this.toast.error(message);
         setTimeout(() => (this.loading = false), 3000);
