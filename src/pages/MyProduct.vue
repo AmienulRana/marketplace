@@ -51,8 +51,10 @@ export default {
     const getProduct = async () => {
       const response = await getProductAPI(this.$store.state.token);
       checkValidateToken(response, this.toast, this.$router);
-      this.products = response?.data;
-      this.loading = false;
+      if (response.status === 200) {
+        this.products = response?.data;
+        this.loading = false;
+      }
     };
     getProduct();
   },
