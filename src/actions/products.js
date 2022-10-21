@@ -52,7 +52,7 @@ export const detailProductAPI = async (id, token) => {
 export const editProductAPI = async (payload, { token: stateToken }, id) => {
   const token = CONFIG.token || stateToken;
   try {
-    const response = await axios.post(
+    const response = await axios.put(
       `${CONFIG.URL_API}/products/${id}`,
       payload,
       { headers: { Authorization: `Bearer ${token}` } }
