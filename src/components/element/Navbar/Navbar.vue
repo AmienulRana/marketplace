@@ -37,7 +37,7 @@
           <li :class="getNavbarActive('/redward')">
             <router-link to="/redward">Redward</router-link>
           </li>
-          <template v-if="isLogin">
+          <template v-if="!isLogin">
             <li :class="getNavbarActive('/register')">
               <router-link to="/register">Sign up</router-link>
             </li>
@@ -54,6 +54,7 @@
           </template>
         </ul>
       </div>
+      <!-- mobile version -->
       <div class="md:hidden flex items-center">
         <NavbarLogin class="md:hidden mr-6" />
         <HamburgerButton @click="handleShowNavbar" />
@@ -91,11 +92,12 @@ export default {
       this.showNavbar = this.showNavbar ? false : true;
     },
   },
-  computed: {
-    showIsLogin() {
-      const token = localStorage.getItem("token");
+  mounted() {
+    const checkUserLogin = () => {
+      const token = this.$store.state.token || localStorage.getItem("token");
       this.isLogin = token ? true : false;
-    },
+    };
+    checkUserLogin();
   },
 };
 </script>
