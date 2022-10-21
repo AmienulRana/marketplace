@@ -41,6 +41,12 @@
           @change="viewImage"
           accept="image/*"
         />
+        <p
+          class="my-2"
+          :class="images.length === 4 ? 'text-red-500' : 'text-green-500'"
+        >
+          {{ restTheImageUpload }}
+        </p>
         <div
           v-if="images.length > 0"
           class="md:grid-cols-4 grid grid-cols-2 gap-4 mt-7"
@@ -127,6 +133,13 @@ export default {
         (img) => image.blobImgUrl !== img.blobImgUrl
       );
       this.images = file;
+    },
+  },
+  computed: {
+    restTheImageUpload() {
+      return `Sisa image yang bisa diupload adalah ${
+        4 - this.images.length
+      } dari 4 `;
     },
   },
 };
