@@ -25,7 +25,7 @@ const routes = [
   { path: "/add-product", component: AddProduct },
   { path: "/login", component: Login, name: "login" },
   { path: "/register", component: Register },
-  { path: "/register-success", component: RegisterSuccess },
+  { path: "/register-success", component: RegisterSuccess, name: "success" },
   { path: "/cart", component: Cart },
   {
     path: "/:catchAll(.*)",
