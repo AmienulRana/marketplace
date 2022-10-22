@@ -77,6 +77,7 @@ import Textarea from "../components/element/Textarea.vue";
 import checkValidateToken from "../utils/checkValidateToken";
 import { addProductAPI } from "../actions/products";
 import { useToast } from "vue-toastification";
+import OptionsCategory from "../data/category.js";
 
 export default {
   name: "StoreSetting",
@@ -86,7 +87,7 @@ export default {
       product_name: "",
       price: 0,
       description: "",
-      options: ["Funiture", "Baby", "Tools", "Gadgets"],
+      options: OptionsCategory,
       category: "",
       stok: 0,
       images: [],

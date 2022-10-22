@@ -84,6 +84,7 @@ import checkValidateToken from "../utils/checkValidateToken";
 import { editProductAPI, detailProductAPI } from "../actions/products";
 import { useToast } from "vue-toastification";
 import CONFIG from "@/config";
+import OptionsCategory from "../data/category.js";
 
 export default {
   name: "StoreSetting",
@@ -93,7 +94,7 @@ export default {
       product_name: "",
       price: 0,
       description: "",
-      options: ["Funiture", "Baby", "Tools", "Gadgets"],
+      options: OptionsCategory,
       category: "",
       stok: 0,
       images: [],

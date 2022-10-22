@@ -106,14 +106,16 @@ import CONFIG from "../config";
 import Loading from "../components/element/Loading.vue";
 import checkValidateToken from "../utils/checkValidateToken.js";
 import { getMyStoreAPI, editMyStoreAPI } from "../actions/storeSetting.js";
+import OptionsCategory from '../data/category.js';
 import axios from "axios";
 import { useToast } from "vue-toastification";
+
 export default {
   name: "StoreSetting",
   components: { Layout, Input, Select, Radio, Button, Loading },
   data() {
     return {
-      options: ["Funiture", "Baby", "Tools", "Gadgets"],
+      options: OptionsCategory,
       query: "",
       locations: [],
       locationsPrediction: [],
