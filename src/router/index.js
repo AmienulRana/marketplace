@@ -1,4 +1,4 @@
-import { createWebHashHistory, createRouter } from "vue-router";
+import { createWebHistory, createRouter } from "vue-router";
 import Home from "../pages/Home.vue";
 import NotFound from "../pages/NotFound.vue";
 import Detail from "../pages/Detail.vue";
@@ -13,6 +13,7 @@ import Register from "../pages/Register.vue";
 import RegisterSuccess from "../pages/RegisterSuccess.vue";
 import Cart from "../pages/Cart.vue";
 import EditProduct from "../pages/EditProduct.vue";
+
 const routes = [
   { path: "/", component: Home, name: "index" },
   { path: "/detail/:id", component: Detail },
@@ -37,7 +38,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 });
 
