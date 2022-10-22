@@ -1,0 +1,63 @@
+const response = await axios.get(`${CONFIG.URL_API}/place`);
+        // const locations = response.data;
+        // const locationLimitTranslate = locations.splice(0, 300);
+        // const locationAlreadyTranslate = [];
+        // console.log(locationLimitTranslate);
+        // for (let i = 0; i < locationLimitTranslate.length; i++) {
+        //   const location = locations[i];
+
+        //   const response = await axios.delete(
+        //     `${CONFIG.URL_API}/place/${location._id}`
+        //   );
+
+        //   console.log(response);
+        // }
+        //   const encodedParams = new URLSearchParams();
+        //   encodedParams.append("source_language", "en");
+        //   encodedParams.append("target_language", "id");
+        //   encodedParams.append("text", location.location_name);
+        //   const options = {
+        //     method: "POST",
+        //     url: "https://long-translator.p.rapidapi.com/translate",
+        //     headers: {
+        //       "content-type": "application/x-www-form-urlencoded",
+        //       "X-RapidAPI-Key":
+        //         "55f3f19d48msh781b2209e43bd73p123434jsn700539554381",
+        //       "X-RapidAPI-Host": "long-translator.p.rapidapi.com",
+        //     },
+        //     data: encodedParams,
+        //   };
+        //   try {
+        //     const response = await axios.request(options);
+        //     const textTranslated = response.data.data.translatedText;
+        //     locationAlreadyTranslate.push({
+        //       ...location,
+        //       location_name: textTranslated,
+        //     });
+        //     console.log(textTranslated);
+        //   } catch (error) {
+        //     console.log(error);
+        //   }
+        // }
+        // console.log("selesai");
+        // localStorage.setItem(
+        //   "locations",
+        //   JSON.stringify(locationAlreadyTranslate)
+        // );
+        // const locations = JSON.parse(localStorage.getItem("locations"));
+        // console.log(locations);
+
+         // for (let i = 0; i < locations.length; i++) {
+        //   const location = locations[i];
+        //   try {
+        //     const response = await axios.post(
+        //       "http://localhost:4000/api/v1/location",
+        //       {
+        //         data: { ...location },
+        //       }
+        //     );
+        //     console.log(response.data);
+        //   } catch (error) {
+        //     console.log(error);
+        //   }
+        // }

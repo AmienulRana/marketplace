@@ -6,7 +6,7 @@
       name="status"
       class="opacity-0 absolute top-0"
       :id="id"
-      @change="$emit('change', e.target.value)"
+      @change="$emit('change')"
       :checked="checked"
     />
     <div
