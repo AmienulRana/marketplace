@@ -1,12 +1,12 @@
 <template>
   <Layout>
-    <section class="lg:px-16 md:px-8 grid grid-cols-2 gap-6 my-16">
+    <section class="lg:px-16 md:px-8 md:grid-cols-2 md:my-16 my-8 grid gap-6">
       <img src="../assets/image/imgLogin.png" class="w-80 md:block hidden" />
       <div class="">
         <h1 class="text-blue-500 mb-6 text-3xl">
           Belanja kebutuhan utama, menjadi lebih mudah
         </h1>
-        <div class="w-4/5">
+        <div class="md:w-4/5">
           <form @submit="handleToLogin">
             <Input
               label="Email Address"
@@ -74,7 +74,6 @@ export default {
           ...data,
         });
         const { message, token } = response?.data;
-        this.loading = false;
         this.toast.success(message);
         this.$store.commit("storeTheToken", token);
         localStorage.setItem("token", token);
@@ -82,7 +81,7 @@ export default {
       } catch (err) {
         const { message } = err?.response?.data;
         this.toast.error(message);
-        setTimeout(() => (this.loading = false), 3000);
+        setTimeout(() => (this.loading = false), 5000);
       }
     },
   },
