@@ -3,7 +3,7 @@
     <div class="md:border-l-2 relative flex pl-2 border-grey-500">
       <router-link to="/dashboard">
         <p class="text-blue-500 flex">
-          Hi, <span class="sm:block hidden ml-2">Amienul</span>
+          Hi, <span class="sm:block hidden ml-2">{{ firstname }}</span>
         </p>
       </router-link>
       <router-link to="/cart">
@@ -36,9 +36,14 @@ import decodeJwtToken from "@/utils/jwtDecode";
 
 export default {
   name: "NavbarLogin",
+  data() {
+    return {
+      firstname: "",
+    };
+  },
   mounted() {
-    const { fullname, email } = decodeJwtToken();
-    this.firstname = fullname.split(" ")[0];
+    const { fullname } = decodeJwtToken();
+    this.firstname = fullname.split(" ")[0] || fullname;
   },
 };
 </script>
