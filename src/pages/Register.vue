@@ -75,13 +75,14 @@ import Radio from "../components/element/Radio.vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
 import CONFIG from "../config";
+import OptionsCategory from "../data/category.js";
 
 export default {
   name: "Register",
   components: { Layout, Input, Button, Radio, Select },
   data() {
     return {
-      categorys: ["Funiture", "Baby", "Tools", "Gadgets"],
+      categorys: OptionsCategory,
       openAStore: false,
       fullname: "",
       email: "",
