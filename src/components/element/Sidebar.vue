@@ -61,9 +61,7 @@ export default {
     handleLogout() {
       localStorage.removeItem("token");
       this.$store.commit("removeTheToken");
-      // this.$router.go(0);
-      // this.$router.push({ name: "login" });
-      window.location.href = "/#/login";
+      window.location.href = "/login";
     },
   },
 };
