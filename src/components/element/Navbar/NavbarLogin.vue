@@ -32,8 +32,14 @@
 </template>
 
 <script>
+import decodeJwtToken from "@/utils/jwtDecode";
+
 export default {
   name: "NavbarLogin",
+  mounted() {
+    const { fullname, email } = decodeJwtToken();
+    this.firstname = fullname.split(" ")[0];
+  },
 };
 </script>
 
