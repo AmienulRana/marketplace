@@ -56,7 +56,7 @@
       </div>
       <!-- mobile version -->
       <div class="md:hidden flex items-center">
-        <NavbarLogin class="md:hidden mr-6" />
+        <NavbarLogin class="md:hidden mr-6" v-if="isLogin" />
         <HamburgerButton @click="handleShowNavbar" />
       </div>
     </nav>
