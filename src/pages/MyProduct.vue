@@ -19,7 +19,10 @@
             class="w-full h-36 object-cover rounded-lg mb-5"
           />
           <p class="text-grey-600">{{ product?.category }}</p>
-          <h2 class="text-lg text-blue-500">{{ product?.nama_product }}</h2>
+          <h2
+            class="text-lg text-blue-500 truncate"
+            v-text="product?.nama_product"
+          ></h2>
         </router-link>
       </div>
     </section>
