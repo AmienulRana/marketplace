@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Toast from "vue-toastification";
 // Import the CSS or use your own!
 import "vue-toastification/dist/index.css";
+import VueNumberFormat from "vue-number-format";
 
 library.add(faMinus, faPlus, faLocationDot);
 
@@ -36,5 +37,6 @@ createApp(App)
   .use(router)
   .use(store)
   .use(Toast)
+  .use(VueNumberFormat, { prefix: "Rp", thousand: "." })
   .component("font-awesome-icon", FontAwesomeIcon)
   .mount("#app");
