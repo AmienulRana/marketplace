@@ -1,5 +1,4 @@
 import { createApp } from "vue";
-import { createStore } from "vuex";
 import App from "./App.vue";
 import "./assets/styles/index.css";
 import router from "./router";
@@ -14,24 +13,9 @@ import Toast from "vue-toastification";
 // Import the CSS or use your own!
 import "vue-toastification/dist/index.css";
 import VueNumberFormat from "vue-number-format";
+import store from "./store";
 
 library.add(faMinus, faPlus, faLocationDot);
-
-const store = createStore({
-  state() {
-    return {
-      token: undefined,
-    };
-  },
-  mutations: {
-    storeTheToken(state, payload) {
-      state.token = payload;
-    },
-    removeTheToken(state) {
-      state.token = undefined;
-    },
-  },
-});
 
 createApp(App)
   .use(router)
