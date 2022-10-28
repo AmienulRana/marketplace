@@ -2,11 +2,12 @@
   <Layout>
     <p class="mb-8"><span class="text-grey-600">Home / </span>Product Detail</p>
     <section
+      v-if="!loading"
       class="md:flex-row flex flex-wrap justify-between flex-col relative"
     >
       <div class="md:h-400px md:w-3/4 h-72 w-full rounded-xl overflow-hidden">
         <img
-          :src="`./image/${imagePreview}`"
+          :src="`${urlImgServer}/${imagePreview}`"
           alt="image"
           class="h-full w-full"
         />
@@ -29,13 +30,13 @@
       >
         <div
           class="md:mb-5 md:w-full w-1/5 rounded-lg overflow-hidden"
-          v-for="(image, i) in images"
+          v-for="(image, i) in product?.images"
           :key="i"
           @click="changePreviewImg(image)"
           :class="image === imagePreview ? 'border-2 border-orange-500' : ''"
         >
           <img
-            :src="`./image/${image}`"
+            :src="`${urlImgServer}/${image}`"
             alt="image"
             class="md:h-85px h-16 w-full"
           />
@@ -47,15 +48,14 @@
         <Button text="Add to Cart" class="w-full" />
       </div>
       <div class="md:w-3/4">
-        <h1 class="text-xl">Sofa Ternyaman</h1>
-        <p class="text-grey-600">By Galih Pratama</p>
-        <p class="text-orange-500 mt-1.5">$1,409</p>
-        <p class="text-grey-700 mt-2.5">
-          Bring the past into the future with the Nike Air Max 2090, a bold look
-          inspired by the DNA of the iconic Air Max 90. Brand-new Nike Air
-          cushioning underfoot adds unparalleled comfort while transparent mesh
-          and vibrantly coloured details on the upper are blended with timeless
-          OG features for an edgy, modernised look.
+        <h1 class="text-xl">{{ product.nama_product }}</h1>
+        <p class="text-grey-600">By {{ product?.store_id?.nama_toko }}</p>
+        <p class="text-orange-500 mt-1.5">
+          <VueNumberFormat :value="product?.harga_product"></VueNumberFormat>
+        </p>
+        <h1 class="text-xl mt-4 mb-2.5">Deskripsi Product</h1>
+        <p class="text-grey-700">
+          {{ product.deskripsi }}
         </p>
       </div>
       <div class="lg:w-1/5 md:w-1/4 sm:block hidden w-full">
@@ -82,15 +82,32 @@
 </template>
 
 <script>
+import { detailProductAPI } from "@/actions/products";
 import Button from "../components/element/Button.vue";
 import Layout from "../components/Layout";
+import CONFIG from "@/config";
 export default {
   name: "Detail",
   data() {
     return {
-      imagePreview: "detail1.jpg",
-      images: ["detail1.jpg", "detail2.png", "detail4.png", "detail5.jpg"],
+      urlImgServer: CONFIG.URL_IMAGES,
+      loading: true,
+      product: {},
+      imagePreview: "",
     };
+  },
+  mounted() {
+    const getDetailProduct = async () => {
+      const response = await detailProductAPI(
+        this.$route.params.id,
+        this.$store.state.token
+      );
+      this.imagePreview =
+        response?.data?.thumbnail || response?.data?.images[0];
+      this.product = response?.data;
+      this.loading = false;
+    };
+    getDetailProduct();
   },
   components: { Button, Layout },
   methods: {
