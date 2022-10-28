@@ -61,12 +61,21 @@
             <p class="text-red-500">{{ image.error }}</p>
           </div>
         </div>
-        <Button
-          :disabled="loading"
-          class="mt-5 w-full"
-          type="sumbit"
-          text="Edit Product"
-        />
+        <div class="md:grid-cols-2 mt-5 gap-2 grid-cols-1 grid">
+          <Button
+            :disabled="loading"
+            class=""
+            type="sumbit"
+            text="Edit Product"
+          />
+          <Button
+            :disabled="loading"
+            background="bg-red-500"
+            type="button"
+            text="Hapus Product"
+            @click="deleteMyProduct"
+          />
+        </div>
       </form>
     </section>
   </Layout>
@@ -81,7 +90,11 @@ import Button from "../components/element/Button.vue";
 import Loading from "../components/element/Loading.vue";
 import Textarea from "../components/element/Textarea.vue";
 import checkValidateToken from "../utils/checkValidateToken";
-import { editProductAPI, detailProductAPI } from "../actions/products";
+import {
+  editProductAPI,
+  detailProductAPI,
+  deleteProductAPI,
+} from "../actions/products";
 import { useToast } from "vue-toastification";
 import CONFIG from "@/config";
 import OptionsCategory from "../data/category.js";
@@ -126,6 +139,16 @@ export default {
         this.$route.params.id
       );
       this.loading = false;
+      checkValidateToken(response, this.toast, this.$router);
+      if (response.status === 200) {
+        this.$router.push("/my-products");
+      }
+    },
+    async deleteMyProduct() {
+      const response = await deleteProductAPI(
+        this.$route.params.id,
+        this.$store.state.token
+      );
       checkValidateToken(response, this.toast, this.$router);
       if (response.status === 200) {
         this.$router.push("/my-products");
