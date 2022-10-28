@@ -62,3 +62,13 @@ export const editProductAPI = async (payload, { token: stateToken }, id) => {
     return error.response;
   }
 };
+
+export const deleteProductAPI = async (id, token) => {
+  try {
+    const options = configOptionsAPI("delete", token, {}, `/${id}`);
+    const response = await axios(options);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
