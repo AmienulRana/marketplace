@@ -7,10 +7,10 @@
       text-base
       items-center
       text-white
-      bg-green-400
       py-2.5
       px-8
     "
+    :class="background ? background : 'bg-green-400'"
     :disabled="disabled"
   >
     {{ text }}
@@ -23,6 +23,7 @@ export default {
   props: {
     text: String,
     disabled: Boolean,
+    background: String,
   },
 };
 </script>
