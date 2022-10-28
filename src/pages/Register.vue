@@ -1,6 +1,6 @@
 <template>
   <Layout>
-    <section class="md:w-2/5 md:my-16 m-auto my-8">
+    <section class="lg:w-2/5 md:w-1/2 md:my-16 m-auto my-8">
       <h1 class="text-blue-500 mb-6 text-3xl">
         Memulai untuk jual beli <br />
         dengan cara terbaru
@@ -103,7 +103,7 @@ export default {
         fullname: this.fullname,
         email: this.email,
         password: this.password,
-        openStore: this.openAStore,
+        openAStore: this.openAStore,
         category: this.category,
         nama_toko: this.nama_toko,
       };
