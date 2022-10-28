@@ -37,6 +37,6 @@ createApp(App)
   .use(router)
   .use(store)
   .use(Toast)
-  .use(VueNumberFormat, { prefix: "Rp", thousand: "." })
+  .use(VueNumberFormat, { prefix: "Rp", thousand: ".", precision: 0 })
   .component("font-awesome-icon", FontAwesomeIcon)
   .mount("#app");
