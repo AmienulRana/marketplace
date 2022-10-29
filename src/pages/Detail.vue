@@ -1,66 +1,88 @@
 <template>
   <Layout>
     <p class="mb-8"><span class="text-grey-600">Home / </span>Product Detail</p>
-    <section
-      v-if="!loading"
-      class="md:flex-row flex flex-wrap justify-between flex-col relative"
-    >
-      <div class="md:h-400px md:w-3/4 h-72 w-full rounded-xl overflow-hidden">
-        <img
-          :src="`${urlImgServer}/${imagePreview}`"
-          alt="image"
-          class="h-full w-full"
-        />
-      </div>
-      <div
-        class="
-          md:w-1/5 md:static md:block md:p-0 md:bg-transparent md:shadow-none
-          h-auto
-          w-full
-          flex
-          justify-between
-          absolute
-          -bottom-14
-          left-0
-          p-2
-          shadow-lg
-          rounded-lg
-          bg-white
-        "
-      >
-        <div
-          class="md:mb-5 md:w-full w-1/5 rounded-lg overflow-hidden"
-          v-for="(image, i) in product?.images"
-          :key="i"
-          @click="changePreviewImg(image)"
-          :class="image === imagePreview ? 'border-2 border-orange-500' : ''"
-        >
+    <section v-if="!loading" class="md:flex-row flex flex-wrap justify-between">
+      <section class="md:w-2/5 h-72 w-full rounded-xl relative">
+        <div class="w-full h-full">
           <img
-            :src="`${urlImgServer}/${image}`"
+            :src="`${urlImgServer}/${imagePreview}`"
             alt="image"
-            class="md:h-85px h-16 w-full"
+            class="h-full w-full rounded-lg"
           />
         </div>
-      </div>
+        <div
+          class="
+            w-full
+            md:shadow-none
+            h-auto
+            grid grid-cols-4
+            gap-2
+            absolute
+            -bottom-28
+            left-0
+            p-2
+            rounded-lg
+            bg-grey-400
+          "
+        >
+          <div
+            class="w-full rounded-lg overflow-hidden"
+            v-for="(image, i) in product?.images"
+            :key="i"
+            @click="changePreviewImg(image)"
+            :class="image === imagePreview ? 'border-2 border-orange-500' : ''"
+          >
+            <img
+              :src="`${urlImgServer}/${image}`"
+              alt="image"
+              class="md:h-85px h-16 w-full"
+            />
+          </div>
+        </div>
+      </section>
+      <section class="md:w-3/5 md:px-10 md:mt-0 mt-32">
+        <div class="w-full">
+          <h1 class="text-xl">{{ product?.nama_product }}</h1>
+          <p class="text-grey-600">By {{ product?.store_id?.nama_toko }}</p>
+          <p class="text-orange-500 mt-1.5">
+            <span class="text-black mr-2"
+              >{{ product?.terjual || 0 }} Terjual |</span
+            >
+            <VueNumberFormat :value="product?.harga_product"></VueNumberFormat>
+          </p>
+          <h3 class="text-lg mt-4 mb-2">Pengiriman :</h3>
+          <p class="text-grey-600">
+            Dikirim dari : {{ product?.store_id?.address?.provinsi }}
+          </p>
+          <div class="flex items-center mb-2.5">
+            <p class="text-grey-600 mr-2">Kota Tujuan :</p>
+            <SearchLocation class="md:w-2/3" />
+          </div>
+
+          <p class="text-grey-600">
+            Ongkos Kirim :
+
+            <VueNumberFormat :value="ongkir"></VueNumberFormat>
+          </p>
+          <div class="flex mt-2.5">
+            <Button
+              text="Cek Ongkir"
+              @click="handleToCheckOngkir"
+              class="mr-2.5"
+              background="bg-grey-600"
+              :disabled="loadingCheckOngkir"
+            />
+
+            <Button text="Add to Cart" />
+          </div>
+        </div>
+      </section>
     </section>
-    <section class="sm:flex md:mt-8 mt-20">
-      <div class="sm:hidden w-full mb-8">
-        <Button text="Add to Cart" class="w-full" />
-      </div>
-      <div class="md:w-3/4">
-        <h1 class="text-xl">{{ product.nama_product }}</h1>
-        <p class="text-grey-600">By {{ product?.store_id?.nama_toko }}</p>
-        <p class="text-orange-500 mt-1.5">
-          <VueNumberFormat :value="product?.harga_product"></VueNumberFormat>
-        </p>
-        <h1 class="text-xl mt-4 mb-2.5">Deskripsi Product</h1>
-        <p class="text-grey-700">
-          {{ product.deskripsi }}
-        </p>
-      </div>
-      <div class="lg:w-1/5 md:w-1/4 sm:block hidden w-full">
-        <Button text="Add to Cart" class="w-full" />
-      </div>
+    <section class="md:mt-32 md:w-4/5 mt-8">
+      <h1 class="text-xl mt-4 mb-2.5">Deskripsi Product</h1>
+      <p class="text-grey-700">
+        {{ product?.deskripsi }}
+      </p>
     </section>
     <section class="mt-8">
       <h1 class="text-xl mb-4">Customers Reviews(30)</h1>
@@ -86,14 +108,20 @@ import { detailProductAPI } from "@/actions/products";
 import Button from "../components/element/Button.vue";
 import Layout from "../components/Layout";
 import CONFIG from "@/config";
+import Input from "@/components/element/Input.vue";
+import SearchLocation from "@/components/organism/SearchLocation.vue";
+import axios from "axios";
+
 export default {
   name: "Detail",
   data() {
     return {
       urlImgServer: CONFIG.URL_IMAGES,
       loading: true,
+      loadingCheckOngkir: false,
       product: {},
       imagePreview: "",
+      ongkir: 0,
     };
   },
   mounted() {
@@ -109,10 +137,31 @@ export default {
     };
     getDetailProduct();
   },
-  components: { Button, Layout },
+  components: { Button, Layout, Input, SearchLocation },
   methods: {
     changePreviewImg(img) {
       this.imagePreview = img;
+    },
+    async handleToCheckOngkir() {
+      const data = {
+        from: this.product?.store_id?.address?.lokasi_id,
+        to: this.$store.state.location.lokasi_id,
+      };
+      try {
+        const response = await axios.post(
+          `${CONFIG.URL_API}/user/check-ongkir`,
+          { ...data }
+        );
+        const expensivePrice = [];
+        const rangeOngkir = response?.data?.results[0]?.costs;
+        rangeOngkir.map((range) =>
+          range.cost.map((ongkir) => expensivePrice.push(ongkir.value))
+        );
+        const sortThePrice = expensivePrice.sort((a, b) => a - b);
+        this.ongkir = sortThePrice[0];
+      } catch (error) {
+        console.log(error.response.data);
+      }
     },
   },
 };
