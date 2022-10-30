@@ -110,7 +110,7 @@ import Layout from "../components/Layout";
 import CONFIG from "@/config";
 import Input from "@/components/element/Input.vue";
 import SearchLocation from "@/components/organism/SearchLocation.vue";
-import { addToCartAPI } from "@/actions/detail";
+import { addToCartAPI, checkOngkirAPI } from "@/actions/detail";
 import checkValidateToken from "@/utils/checkValidateToken";
 import { useToast } from "vue-toastification";
 
