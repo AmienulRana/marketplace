@@ -73,7 +73,7 @@
               :disabled="loadingCheckOngkir"
             />
 
-            <Button text="Add to Cart" />
+            <Button text="Add to Cart" @click="addToCart(product?._id)" />
           </div>
         </div>
       </section>
@@ -110,7 +110,9 @@ import Layout from "../components/Layout";
 import CONFIG from "@/config";
 import Input from "@/components/element/Input.vue";
 import SearchLocation from "@/components/organism/SearchLocation.vue";
-import axios from "axios";
+import { addToCartAPI } from "@/actions/detail";
+import checkValidateToken from "@/utils/checkValidateToken";
+import { useToast } from "vue-toastification";
 
 export default {
   name: "Detail",
@@ -138,6 +140,10 @@ export default {
     getDetailProduct();
   },
   components: { Button, Layout, Input, SearchLocation },
+  setup() {
+    const toast = useToast();
+    return { toast };
+  },
   methods: {
     changePreviewImg(img) {
       this.imagePreview = img;
@@ -147,21 +153,19 @@ export default {
         from: this.product?.store_id?.address?.lokasi_id,
         to: this.$store.state.location.lokasi_id,
       };
-      try {
-        const response = await axios.post(
-          `${CONFIG.URL_API}/user/check-ongkir`,
-          { ...data }
-        );
-        const expensivePrice = [];
-        const rangeOngkir = response?.data?.results[0]?.costs;
-        rangeOngkir.map((range) =>
-          range.cost.map((ongkir) => expensivePrice.push(ongkir.value))
-        );
-        const sortThePrice = expensivePrice.sort((a, b) => a - b);
-        this.ongkir = sortThePrice[0];
-      } catch (error) {
-        console.log(error.response.data);
+      const response = await checkOngkirAPI(data);
+      if (response?.status > 300) {
+        return;
+      } else {
+        this.ongkir = response;
       }
+    },
+    async addToCart(id) {
+      const data = {
+        id_product: id,
+      };
+      const response = await addToCartAPI(this.$store.state.token, data);
+      checkValidateToken(response, this.toast, this.$router);
     },
   },
 };
