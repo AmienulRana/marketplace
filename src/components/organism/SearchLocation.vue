@@ -1,6 +1,7 @@
 <template>
   <div class="relative">
     <Input
+      :label="label"
       :modelValue="location"
       @update:modelValue="(newValue, event) => searchPlace(newValue, event)"
     />
@@ -50,6 +51,10 @@ import Loading from "../element/Loading.vue";
 export default {
   name: "SearchLocation",
   components: { Input, Loading },
+  props: {
+    label: String,
+    getLocationUser: Function,
+  },
   setup() {
     const toast = useToast();
     return { toast };
@@ -81,6 +86,7 @@ export default {
       this.query = "";
       this.$store.commit("fillLocation", location);
       this.location = this.$store.state.location.nama_lokasi;
+      this.getLocationUser(location);
     },
   },
   mounted() {
