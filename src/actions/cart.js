@@ -10,3 +10,14 @@ export const getMyCartsAPI = async (token) => {
     return error.response;
   }
 };
+
+export const deleteMyCartsAPI = async (token, id) => {
+  try {
+    const options = optionsAxios("delete", token, {}, `/cart/${id}`);
+    const response = await axios(options);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error.response;
+  }
+};
