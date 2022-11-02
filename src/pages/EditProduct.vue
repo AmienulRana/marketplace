@@ -73,12 +73,29 @@
             background="bg-red-500"
             type="button"
             text="Hapus Product"
-            @click="deleteMyProduct"
+            @click="handleShowModal"
           />
         </div>
       </form>
     </section>
   </Layout>
+  <Modal :showModal="showModal" @closeModal="() => (showModal = false)">
+    <section class="flex items-center justify-center flex-col">
+      <img src="@/assets/icons/warning-modal.svg" class="mt-10 mb-5" />
+      <h1 class="md:text-2xl text-lg text-center">
+        Apakah kamu yakin ingin menghapus product ini??
+      </h1>
+      <div class="md:w-1/2 flex justify-between my-5 w-full">
+        <Button
+          text="Cancel"
+          class="mr-2"
+          background="bg-grey-600"
+          @click="showModal = false"
+        />
+        <Button text="Hapus" background="bg-red-500" @click="deleteMyProduct" />
+      </div>
+    </section>
+  </Modal>
 </template>
 
 <script>
@@ -87,7 +104,6 @@ import Input from "../components/element/Input.vue";
 import Select from "../components/element/Select.vue";
 import Radio from "../components/element/Radio.vue";
 import Button from "../components/element/Button.vue";
-import Loading from "../components/element/Loading.vue";
 import Textarea from "../components/element/Textarea.vue";
 import checkValidateToken from "../utils/checkValidateToken";
 import {
@@ -98,10 +114,11 @@ import {
 import { useToast } from "vue-toastification";
 import CONFIG from "@/config";
 import OptionsCategory from "../data/category.js";
+import Modal from "@/components/element/Modal.vue";
 
 export default {
   name: "StoreSetting",
-  components: { Layout, Input, Select, Radio, Button, Textarea, Loading },
+  components: { Layout, Input, Select, Radio, Button, Textarea, Modal },
   data() {
     return {
       product_name: "",
@@ -113,6 +130,7 @@ export default {
       images: [],
       deleting_images: [],
       loading: false,
+      showModal: false,
     };
   },
   setup() {
@@ -153,6 +171,9 @@ export default {
       if (response.status === 200) {
         this.$router.push("/my-products");
       }
+    },
+    handleShowModal() {
+      this.showModal = true;
     },
     validateImg(image) {
       const max_file = 1000000;
