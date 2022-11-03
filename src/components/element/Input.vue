@@ -6,6 +6,7 @@
     <input
       :type="type"
       :value="modelValue"
+      autocomplete="off"
       class="
         w-full
         h-11
