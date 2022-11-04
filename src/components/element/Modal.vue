@@ -18,6 +18,7 @@
             modal
             rounded-lg
           "
+          :class="classModal"
           v-if="showModal"
         >
           <slot />
@@ -30,7 +31,7 @@
 <script>
 export default {
   name: "Modal",
-  props: { showModal: Boolean },
+  props: { showModal: Boolean, classModal: String },
   emits: ["closeModal"],
 };
 </script>
