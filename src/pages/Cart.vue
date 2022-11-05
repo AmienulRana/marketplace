@@ -1,9 +1,11 @@
 <template>
   <Layout>
-    <p class="text-blue-500"><span class="text-grey-600">Home / </span>Cart</p>
+    <p class="text-blue-500 mb-7">
+      <span class="text-grey-600">Home / </span>Cart
+    </p>
     <section class="border-b-2 border-grey-500">
       <section
-        v-if="products.length === 0"
+        v-if="!carts.products"
         class="flex flex-col items-center mt-6 mb-7"
       >
         <img src="@/assets/icons/empty-cart.svg" class="w-80" />
@@ -12,20 +14,20 @@
         </h2>
       </section>
       <section
-        class="flex mt-6 mb-7"
-        v-for="product in products"
+        class="flex mt-6 mb-7 w-full"
+        v-for="product in carts?.products"
         :key="product._id"
       >
         <img
           :src="`${urlImgServer}/${product?.thumbnail}`"
           class="sm:w-40 sm:h-20 w-36 h-16 rounded-lg object-cover"
         />
-        <div class="ml-3.5 w-full">
+        <div class="ml-3.5 overflow-hidden">
           <h2 class="text-blue-500 truncate">
             {{ product?.nama_product }}
           </h2>
           <p class="text-grey-600 text-sm my-1">
-            {{ product?.store_detail?.nama_toko }}
+            {{ carts?.store_detail?.nama_toko }}
           </p>
           <p class="text-grey-600 text-sm">
             <VueNumberFormat
@@ -37,14 +39,14 @@
           <div class="flex border-2 border-grey-500 w-max px-2 rounded-md mt-2">
             <button
               class="border-none bg-transparent w-7 text-grey-600"
-              @click="deleteFromCart(product?.id_product)"
+              @click="deleteFromCart(product?._id)"
             >
               <font-awesome-icon icon="minus" />
             </button>
             <p class="text-grey-600 mx-4">{{ product?.quantity }}</p>
             <button
               class="border-none bg-transparent w-7 text-grey-600"
-              @click="addToCart(product?.id_product)"
+              @click="addToCart(product?._id)"
             >
               <font-awesome-icon icon="plus" />
             </button>
@@ -68,14 +70,90 @@
         <Input label="Mobile" type="tel" :modelValue="address.mobile_phone" />
       </div>
       <Textarea
-        label="Alamat lengkap anda*"
+        label="Alamat lengkap anda"
         :modelValue="address.full_address"
+        @update:modelValue="(newValue) => (address.full_address = newValue)"
       />
     </section>
     <section class="mb-24">
       <h2 class="text-blue-500 mb-4 font-bold">Payments Information</h2>
+      <p class="flex justify-between mb-2">
+        Pembayaran : <span>COD (bayar ditempat)</span>
+      </p>
+      <p class="flex justify-between mb-2">
+        Total Product :
+        <span>
+          <VueNumberFormat
+            :value="getTotalProduct"
+            class="w-max bg-transparent text-right"
+            disabled="true"
+          ></VueNumberFormat>
+        </span>
+      </p>
+      <div class="flex justify-between mb-2">
+        <p>Ongkos kirim :</p>
+        <p>
+          <span
+            @click="handleShowModal"
+            class="underline text-grey-600 cursor-pointer"
+          >
+            Pilih pengiriman</span
+          >
+          <VueNumberFormat
+            :value="ongkir_detail?.price"
+            v-if="ongkir_detail?.price !== 0"
+            class="w-24 bg-transparent text-right"
+            disabled="true"
+          ></VueNumberFormat>
+        </p>
+      </div>
+      <p class="flex justify-between mb-2">
+        Total Harga :
+        <span>
+          <VueNumberFormat
+            :value="getTotalHarga"
+            class="w-max bg-transparent text-right"
+            disabled="true"
+          ></VueNumberFormat>
+        </span>
+      </p>
+      <div class="flex justify-end mt-3">
+        <Button text="Bayar sekarang" @click="handleToTransaction" />
+      </div>
     </section>
   </Layout>
+  <Modal
+    :showModal="showModal"
+    @closeModal="showModal = false"
+    classModal="lg:w-1/2 md:w-4/5 w-11/12"
+  >
+    <section class="my-4">
+      <h2 class="mt-2.5 font-bold">Silahkan Pilih Jasa Pengiriman</h2>
+      <p class="text-grey-600 text-sm mb-5">
+        Estimasi tanggal diterima tergantung pada waktu pengemasan Penjual dan
+        waktu pengiriman ke lokasi Anda
+      </p>
+      <section class="border-b border-dashed pb-3 mb-3">
+        <Loading v-if="loading" />
+        <template v-else>
+          <RowOngkir
+            v-for="ongkir in ongkirs"
+            :key="ongkir.service_name"
+            @click="setHargaOngkir(ongkir)"
+            :service_name="ongkir.service_name"
+            :value="ongkir?.cost?.value"
+            :etd="ongkir?.cost?.etd"
+          />
+        </template>
+      </section>
+      <p
+        class="text-grey-600 text-right cursor-pointer"
+        @click="showModal = false"
+      >
+        Nanti Saja
+      </p>
+    </section>
+  </Modal>
 </template>
 
 <script>
@@ -83,20 +161,42 @@ import Layout from "../components/Layout";
 import Input from "../components/element/Input.vue";
 import { getMyCartsAPI } from "@/actions/cart";
 import { addToCartAPI } from "@/actions/detail";
-import { deleteMyCartsAPI } from "@/actions/cart";
+import { deleteMyCartsAPI, checkOngkirAPI } from "@/actions/cart";
 import checkValidateToken from "@/utils/checkValidateToken";
 import { useToast } from "vue-toastification";
 import CONFIG from "@/config";
 import SearchLocation from "@/components/organism/SearchLocation.vue";
 import Textarea from "@/components/element/Textarea.vue";
+import Button from "@/components/element/Button.vue";
+import Modal from "@/components/element/Modal.vue";
+import RowOngkir from "@/components/organism/Cart/RowOngkir.vue";
+import Loading from "@/components/element/Loading.vue";
 
 export default {
   name: "Cart",
-  components: { Layout, Input, SearchLocation, Textarea },
+  components: {
+    Layout,
+    Input,
+    SearchLocation,
+    Textarea,
+    Button,
+    Modal,
+    RowOngkir,
+    Loading,
+  },
   data() {
     return {
       urlImgServer: CONFIG.URL_IMAGES,
-      products: [],
+      carts: {},
+      showModal: false,
+      loading: true,
+      ongkirs: [],
+      ongkir_detail: {
+        courier: "",
+        service_name: "",
+        price: 0,
+        estimasi: "",
+      },
       address: {
         provinsi: this.$store.state.location.provinsi,
         postal_code: this.$store.state.location.postal_code,
@@ -112,7 +212,7 @@ export default {
       const response = await getMyCartsAPI(store.state.token);
       checkValidateToken(response, toast, router);
       if (response.status === 200) {
-        data.products = response?.data;
+        data.carts = response?.data;
       }
     };
     return { toast, getMyCarts };
@@ -138,6 +238,61 @@ export default {
       if (response.status === 200) {
         this.getMyCarts(this, this.$store, this.$router);
       }
+    },
+    handleShowModal() {
+      if (!this.carts.products) {
+        this.toast.error("Silahkan pilih product terlebih dahulu");
+      } else if (!this.$store.state.location.lokasi_id) {
+        this.toast.error("Silahkan isi Lokasi anda terlebih dahulu");
+      } else {
+        // this.ongkirs = [];
+        this.handleToCheckOngkir("jne");
+        this.showModal = true;
+      }
+    },
+    async handleToCheckOngkir(courier = "jne") {
+      this.loading = true;
+      const data = {
+        from: this.carts?.store_detail?.address.lokasi_id,
+        to: this.$store.state.location.lokasi_id,
+        courier,
+      };
+      const response = await checkOngkirAPI(data);
+      const results = response?.data?.rajaongkir?.results[0];
+      let ongkir = [];
+      const createCategoryService = results?.costs.map((res) => {
+        ongkir.push({
+          service_name: res.description,
+          cost: res?.cost[0],
+          courier: results.code,
+        });
+      });
+      this.ongkirs = ongkir;
+      this.loading = false;
+    },
+    setHargaOngkir(ongkir) {
+      this.ongkir_detail = {
+        courier: ongkir?.courier,
+        service_name: ongkir?.service_name,
+        price: ongkir?.cost?.value,
+        estimasi: ongkir?.cost?.etd,
+      };
+    },
+    handleToTransaction() {
+      const { carts, ongkir_detail, address } = this;
+      console.log(carts);
+      console.log(ongkir_detail);
+      console.log(address);
+    },
+  },
+  computed: {
+    getTotalHarga() {
+      return this.getTotalProduct + this.ongkir_detail?.price;
+    },
+    getTotalProduct() {
+      return this.carts?.products?.reduce((total, product) => {
+        return total + product?.total_harga;
+      }, 0);
     },
   },
   mounted() {
