@@ -24,14 +24,15 @@ export default {
     };
   },
   mounted() {
-    setInterval(() => {
-      if (this.countTiming === 0) {
-        this.$router.push({ name: "success" });
-        this.countTiming = 4;
-      } else {
-        this.countTiming = this.countTiming - 1;
-      }
-    }, 1000);
+    // setInterval(() => {
+    //   if (this.countTiming === 0) {
+    //     this.$router.push({ name: "login" });
+    //     clearInterval();
+    //     // this.countTiming = 4;
+    //   } else {
+    //     this.countTiming = this.countTiming - 1;
+    //   }
+    // }, 1000);
   },
 };
 </script>
