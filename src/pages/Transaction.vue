@@ -6,7 +6,9 @@
       </p>
       <p class="cursor-pointer">Buy Product</p>
     </div>
-    <RowTransaction />
+    <router-link to="/transactions-detail/12312">
+      <RowTransaction />
+    </router-link>
   </Layout>
 </template>
 
