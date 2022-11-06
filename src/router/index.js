@@ -4,6 +4,7 @@ import NotFound from "../pages/NotFound.vue";
 import Detail from "../pages/Detail.vue";
 import Dashboard from "../pages/Dashboard.vue";
 import Transactions from "../pages/Transaction.vue";
+import TransactionsDetail from "../pages/TransactionDetail.vue";
 import MyProduct from "../pages/MyProduct.vue";
 import MyAccount from "../pages/MyAccount.vue";
 import StoreSetting from "../pages/StoreSetting.vue";
@@ -19,6 +20,7 @@ const routes = [
   { path: "/detail/:id", component: Detail },
   { path: "/dashboard", component: Dashboard },
   { path: "/transactions", component: Transactions },
+  { path: "/transactions-detail/:id", component: TransactionsDetail },
   { path: "/my-products", component: MyProduct },
   { path: "/my-products/:id", component: EditProduct },
   { path: "/settings", component: StoreSetting },
