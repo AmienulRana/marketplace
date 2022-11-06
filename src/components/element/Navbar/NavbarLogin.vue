@@ -24,7 +24,7 @@
             text-white
           "
         >
-          3
+          {{ total_cart }}
         </p>
       </router-link>
     </div>
@@ -33,17 +33,24 @@
 
 <script>
 import decodeJwtToken from "@/utils/jwtDecode";
+import { getMyCartsAPI } from "@/actions/cart";
 
 export default {
   name: "NavbarLogin",
   data() {
     return {
       firstname: "",
+      total_cart: 0,
     };
   },
   mounted() {
     const { fullname } = decodeJwtToken();
     this.firstname = fullname.split(" ")[0] || fullname;
+    const getTotalCart = async () => {
+      const response = await getMyCartsAPI(this.$store.state.token);
+      this.total_cart = response?.data?.products?.length || 0;
+    };
+    getTotalCart();
   },
 };
 </script>
