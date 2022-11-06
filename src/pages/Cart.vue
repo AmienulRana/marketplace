@@ -67,7 +67,12 @@
       </div>
       <div class="md:grid-cols-2 grid gap-4 grid-cols-1 mb-6">
         <Input label="Negara" disabled :modelValue="address.negara" />
-        <Input label="Mobile" type="tel" :modelValue="address.mobile_phone" />
+        <Input
+          label="Mobile"
+          type="tel"
+          :modelValue="address.mobile_phone"
+          @update:modelValue="(newValue) => (address.mobile_phone = newValue)"
+        />
       </div>
       <Textarea
         label="Alamat lengkap anda"
@@ -278,11 +283,29 @@ export default {
         estimasi: ongkir?.cost?.etd,
       };
     },
+    validateCheckout() {
+      const { lokasi_id } = this.$store.state.location;
+      const { mobile_phone, full_address } = this.address;
+      const { price, courier } = this.ongkir_detail;
+      if (!this.carts) {
+        this.toast.error("Anda tidak bisa checkout!");
+        return false;
+      } else if (!lokasi_id || !mobile_phone || !full_address) {
+        this.toast.error("Silahkan lengkapi alamat anda!");
+        return false;
+      } else if (!price === 0 || !courier) {
+        this.toast.error("Silahkan pilih pengiriman!");
+        return false;
+      }
+      return true;
+    },
     handleToTransaction() {
       const { carts, ongkir_detail, address } = this;
-      console.log(carts);
-      console.log(ongkir_detail);
-      console.log(address);
+      if (this.validateCheckout()) {
+        console.log(carts);
+        console.log(ongkir_detail);
+        console.log(address);
+      }
     },
   },
   computed: {
