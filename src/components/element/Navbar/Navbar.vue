@@ -1,7 +1,9 @@
 <template>
   <header>
     <nav class="flex justify-between items-center py-7 relative">
-      <img src="../../../assets/icons/logo.svg" />
+      <router-link to="/">
+        <img src="../../../assets/icons/logo.svg" />
+      </router-link>
       <div
         class="
           md:w-auto md:flex-row md:static md:h-0 md:py-0
