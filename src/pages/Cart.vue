@@ -250,7 +250,6 @@ export default {
       } else if (!this.$store.state.location.lokasi_id) {
         this.toast.error("Silahkan isi Lokasi anda terlebih dahulu");
       } else {
-        // this.ongkirs = [];
         this.handleToCheckOngkir("jne");
         this.showModal = true;
       }
