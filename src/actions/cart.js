@@ -35,3 +35,14 @@ export const checkOngkirAPI = async (data) => {
     return error.response;
   }
 };
+
+export const addTransactionAPI = async (token, payload) => {
+  try {
+    const options = optionsAxios("post", token, payload, `/transaction`);
+    const response = await axios(options);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error.response;
+  }
+};
