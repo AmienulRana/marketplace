@@ -16,6 +16,11 @@
 <script>
 export default {
   name: "RowTransaction",
+  props: {
+    thumbnail: { type: String },
+    name_product: { type: String },
+    customer_name: { type: String },
+  },
 };
 </script>
 
