@@ -164,9 +164,14 @@
 <script>
 import Layout from "../components/Layout";
 import Input from "../components/element/Input.vue";
-import { getMyCartsAPI } from "@/actions/cart";
+import {
+  addTransactionAPI,
+  getMyCartsAPI,
+  deleteMyCartsAPI,
+  checkOngkirAPI,
+} from "@/actions/cart";
 import { addToCartAPI } from "@/actions/detail";
-import { deleteMyCartsAPI, checkOngkirAPI } from "@/actions/cart";
+
 import checkValidateToken from "@/utils/checkValidateToken";
 import { useToast } from "vue-toastification";
 import CONFIG from "@/config";
@@ -286,8 +291,8 @@ export default {
       const { lokasi_id } = this.$store.state.location;
       const { mobile_phone, full_address } = this.address;
       const { price, courier } = this.ongkir_detail;
-      if (!this.carts) {
-        this.toast.error("Anda tidak bisa checkout!");
+      if (!this.carts || this.carts.products.length === 0) {
+        this.toast.error("Tidak ada barang dikeranjang anda!");
         return false;
       } else if (!lokasi_id || !mobile_phone || !full_address) {
         this.toast.error("Silahkan lengkapi alamat anda!");
@@ -298,12 +303,21 @@ export default {
       }
       return true;
     },
-    handleToTransaction() {
+    async handleToTransaction() {
       const { carts, ongkir_detail, address } = this;
+      const {
+        token,
+        location: { nama_lokasi },
+      } = this.$store.state;
       if (this.validateCheckout()) {
-        console.log(carts);
-        console.log(ongkir_detail);
-        console.log(address);
+        const response = await addTransactionAPI(token, {
+          store_detail: carts.store_detail,
+          ongkir_detail,
+          address: { ...address, nama_lokasi },
+          products: carts?.products,
+        });
+        console.log(response);
+        checkValidateToken(response, this.toast, this.$router);
       }
     },
   },
