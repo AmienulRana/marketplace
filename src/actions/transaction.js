@@ -12,3 +12,12 @@ export const getProductPurchaseAPI = async (token) => {
     return error.response;
   }
 };
+export const getDetailTransactionAPI = async (token, id) => {
+  try {
+    const options = optionsAxios("put", token, {}, `/transaction/${id}`);
+    const response = await axios(options);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
