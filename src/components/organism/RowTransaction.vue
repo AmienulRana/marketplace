@@ -1,14 +1,11 @@
 <template>
   <div class="flex mb-4 items-center justify-between p-3.5 bg-white rounded-md">
     <div class="flex items-center">
-      <img
-        src="../../../public/image/newproduct1.jpg"
-        class="w-11 h-11 object-cover rounded-md mr-3"
-      />
-      <h2>Shirup Marzzan</h2>
+      <img :src="thumbnail" class="w-11 h-11 object-cover rounded-md mr-3" />
+      <h2 class="md:w-72 truncate w-48">{{ name_product }}</h2>
     </div>
-    <p>Angga Risky</p>
-    <p>12 Januari, 2020</p>
+    <p>{{ customer_name }}</p>
+    <p>{{ new Date(date).toLocaleDateString() }}</p>
     <img src="../../assets/icons/arrow-right.svg" />
   </div>
 </template>
@@ -20,11 +17,7 @@ export default {
     thumbnail: { type: String },
     name_product: { type: String },
     customer_name: { type: String },
-  },
-  computed: {
-    generateLocalDate(date) {
-      return new Date(date).toLocaleDateString();
-    },
+    date: { type: String },
   },
 };
 </script>
