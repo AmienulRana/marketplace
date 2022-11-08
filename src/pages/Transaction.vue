@@ -6,18 +6,41 @@
       </p>
       <p class="cursor-pointer">Buy Product</p>
     </div>
-    <router-link to="/transactions-detail/12312">
-      <RowTransaction />
-    </router-link>
+    <template v-for="transaction in transactions" :key="transaction._id">
+      <router-link :to="`/transactions-detail/${transaction._id}`">
+        <RowTransaction
+          :thumbnail="`${urlImgServer}/${transaction?.product?.thumbnail}`"
+          :name_product="transaction?.product?.nama_product"
+          :customer_name="transaction?.user_id?.fullname"
+          :date="transaction?.createdAt"
+        />
+      </router-link>
+    </template>
   </Layout>
 </template>
 
 <script>
 import Layout from "../components/Layout/Dashboard.vue";
 import RowTransaction from "../components/organism/RowTransaction.vue";
+import { getProductPurchaseAPI } from "@/actions/transaction";
+import CONFIG from "@/config";
 export default {
   name: "Transaction",
+  data() {
+    return {
+      transactions: [],
+      urlImgServer: CONFIG.URL_IMAGES,
+    };
+  },
   components: { Layout, RowTransaction },
+  mounted() {
+    const getProductPurchased = async () => {
+      const response = await getProductPurchaseAPI(this.$store.state.token);
+      this.transactions = response?.data;
+    };
+
+    getProductPurchased();
+  },
 };
 </script>
 
