@@ -1,6 +1,6 @@
 import CONFIG from "@/config";
 const optionsAxios = (method, token, payload, url) => {
-  const autToken = token || CONFIG.token;
+  const autToken = token || localStorage.getItem("token");
   const options = {
     url: `${CONFIG.URL_API}${url}`,
     method: method,
