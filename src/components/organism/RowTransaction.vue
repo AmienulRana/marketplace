@@ -21,6 +21,11 @@ export default {
     name_product: { type: String },
     customer_name: { type: String },
   },
+  computed: {
+    generateLocalDate(date) {
+      return new Date(date).toLocaleDateString();
+    },
+  },
 };
 </script>
 
