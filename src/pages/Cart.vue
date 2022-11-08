@@ -316,8 +316,10 @@ export default {
           address: { ...address, nama_lokasi },
           products: carts?.products,
         });
-        console.log(response);
         checkValidateToken(response, this.toast, this.$router);
+        if (response.status === 200) {
+          this.$router.push({ name: "index" });
+        }
       }
     },
   },
