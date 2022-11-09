@@ -6,7 +6,7 @@
         {{ value }}
       </template>
       <VueNumberFormat
-        :value="value"
+        :value="value || 1"
         class="md:text-left w-32 bg-transparent text-right"
         disabled="true"
         v-else
@@ -18,7 +18,7 @@
 <script>
 export default {
   name: "TextInformation",
-  props: { title: String, value: String },
+  props: { title: String, value: undefined | String | Number },
 };
 </script>
 
