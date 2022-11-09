@@ -2,9 +2,9 @@ import CONFIG from "@/config";
 import optionsAxios from "@/utils/optionsAxios";
 import axios from "axios";
 
-export const getProductPurchaseAPI = async (token) => {
+export const getProductPurchaseAPI = async (token, restUrl) => {
   try {
-    const options = optionsAxios("get", token, {}, `/transaction`);
+    const options = optionsAxios("get", token, {}, `/transaction${restUrl}`);
     const response = await axios(options);
     return response;
   } catch (error) {
