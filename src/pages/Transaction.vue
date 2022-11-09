@@ -1,13 +1,26 @@
 <template>
   <Layout title="Transactions" text="Big result start from the small one">
     <div class="flex mb-5">
-      <p class="cursor-pointer font-bold border-b-2 mr-8 border-black">
+      <p
+        class="cursor-pointer mr-8 border-black"
+        @click="changeGetTransaction('store')"
+        :class="get_transaction_by === 'store' ? 'font-bold border-b-2' : ''"
+      >
         Sell Product
       </p>
-      <p class="cursor-pointer">Buy Product</p>
+      <p
+        class="cursor-pointer border-black"
+        @click="changeGetTransaction('user')"
+        :class="get_transaction_by === 'user' ? 'font-bold border-b-2' : ''"
+      >
+        Buy Product
+      </p>
     </div>
     <template v-for="transaction in transactions" :key="transaction._id">
-      <router-link :to="`/transactions-detail/${transaction._id}`">
+      <router-link
+        :to="`/transactions-detail/${transaction._id}?by=${get_transaction_by}`"
+        v-if="transactions.length > 0"
+      >
         <RowTransaction
           :thumbnail="`${urlImgServer}/${transaction?.product?.thumbnail}`"
           :name_product="transaction?.product?.nama_product"
@@ -24,22 +37,41 @@ import Layout from "../components/Layout/Dashboard.vue";
 import RowTransaction from "../components/organism/RowTransaction.vue";
 import { getProductPurchaseAPI } from "@/actions/transaction";
 import CONFIG from "@/config";
+import checkValidateToken from "@/utils/checkValidateToken";
+import { useToast } from "vue-toastification";
+
 export default {
   name: "Transaction",
   data() {
     return {
       transactions: [],
       urlImgServer: CONFIG.URL_IMAGES,
+      get_transaction_by: "store",
     };
   },
   components: { Layout, RowTransaction },
-  mounted() {
-    const getProductPurchased = async () => {
-      const response = await getProductPurchaseAPI(this.$store.state.token);
-      this.transactions = response?.data;
+  methods: {
+    changeGetTransaction(by) {
+      this.get_transaction_by = by;
+      this.getProductPurchased(this);
+    },
+  },
+  setup() {
+    const toast = useToast();
+
+    const getProductPurchased = async (data) => {
+      const response = await getProductPurchaseAPI(
+        data.$store.state.token,
+        `?by=${data.get_transaction_by}`
+      );
+      data.transactions = response?.data;
+      checkValidateToken(response, toast, data.$router);
     };
 
-    getProductPurchased();
+    return { toast, getProductPurchased };
+  },
+  mounted() {
+    this.getProductPurchased(this);
   },
 };
 </script>
