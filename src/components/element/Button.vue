@@ -10,7 +10,7 @@
       py-2.5
       px-8
     "
-    :class="background ? background : 'bg-green-400'"
+    :class="buttonClass"
     :disabled="disabled"
   >
     {{ text }}
@@ -24,6 +24,15 @@ export default {
     text: String,
     disabled: Boolean,
     background: String,
+  },
+  computed: {
+    buttonClass() {
+      const { disabled, background } = this;
+      let classBtn = " ";
+      classBtn += background ? background : "bg-green-400 ";
+      classBtn += disabled ? "opacity-70 cursor-default" : "opacity-100 ";
+      return classBtn;
+    },
   },
 };
 </script>
