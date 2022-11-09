@@ -6,7 +6,10 @@
     <div class="bg-white rounded-lg h-auto w-full p-10 relative">
       <section class="md:grid-cols-3 md:gap-3 grid grid-cols-1 md:mb-7">
         <section class="w-56 h-56">
-          <img src="../../public/image/newproduct1.jpg" class="w-full h-full" />
+          <img
+            :src="`${urlImgServer}/${transaction?.product?.thumbnail}`"
+            class="w-full h-full rounded-lg"
+          />
         </section>
         <section class="md:mt-0 mt-4">
           <p class="md:hidden md:text-xl text-lg text-blue-500 mb-4">
@@ -115,11 +118,13 @@ import {
 import checkValidateToken from "@/utils/checkValidateToken";
 import { useToast } from "vue-toastification";
 import Button from "@/components/element/Button.vue";
+import CONFIG from "@/config";
 
 export default {
   name: "TransactionDetail",
   data() {
     return {
+      urlImgServer: CONFIG.URL_IMAGES,
       options: ["Pending", "Telah diserahkan kurir", "Cancel"],
       transaction: {},
       status_product: "Pending",
