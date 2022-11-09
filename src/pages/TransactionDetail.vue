@@ -12,14 +12,32 @@
           <p class="md:hidden md:text-xl text-lg text-blue-500 mb-4">
             Infomation Detail
           </p>
-          <TextInformation title="Customer Name" value="Amienul" />
-          <TextInformation title="Date Transaction" value="12 Januari 2022" />
-          <TextInformation title="Total" value="Rp20.000" />
+          <TextInformation
+            title="Customer Name"
+            :value="transaction?.user_id?.fullname"
+          />
+          <TextInformation
+            title="Date Transaction"
+            :value="new Date(transaction?.createdAt).toLocaleDateString()"
+          />
+          <TextInformation
+            title="Total"
+            :value="transaction?.product?.total_harga"
+          />
         </section>
         <section>
-          <TextInformation title="Product Name" value="Amienul" />
-          <TextInformation title="Quantity" value="1" />
-          <TextInformation title="Mobile" value="085260298204" />
+          <TextInformation
+            title="Product Name"
+            :value="transaction?.product?.nama_product"
+          />
+          <TextInformation
+            title="Quantity"
+            :value="String(transaction?.product?.quantity)"
+          />
+          <TextInformation
+            title="Mobile"
+            :value="transaction?.address_user?.phone_number"
+          />
         </section>
       </section>
       <section class="grid md:gap-2 md:grid-cols-2 grid-cols-1">
@@ -29,32 +47,59 @@
           </p>
           <TextInformation
             title="Location"
-            value="Kota Medan, Sumatera utara"
+            :value="transaction?.address_user?.nama_lokasi"
           />
           <div class="grid md:grid-cols-2 grid-cols-1">
             <TextInformation title="Provinsi" value="Sumatera utara" />
             <TextInformation
               title="Postal code"
-              value="23414"
+              :value="transaction?.address_user?.postal_code"
               class="md:mr-14"
             />
           </div>
-          <TextInformation title="Full address" value="Full Address" />
+          <TextInformation
+            title="Full address"
+            :value="transaction?.address_user?.full_address"
+          />
           <div class="mb-6">
             <p class="text-sm mb-2 text-grey-600">Status</p>
-            <Select :options="options" class="md:w-1/2" />
+            <Select
+              :options="options"
+              class="md:w-1/2"
+              :modelValue="status_product"
+              @update:modelValue="(new_status) => (status_product = new_status)"
+            />
           </div>
         </section>
         <section>
           <p class="md:text-xl text-lg text-blue-500 mb-4">
             Courier Infomation
           </p>
-          <TextInformation title="Ekspedisi" value="JNE" />
-          <TextInformation title="Service" value="Yakin Esok Sampai" />
-          <TextInformation title="Price" value="Rp34.000" />
-          <TextInformation title="Estimasi" value="1 - 2 Hari" />
+          <TextInformation
+            title="Ekspedisi"
+            :value="transaction?.ongkir_detail?.courier.toLocaleUpperCase()"
+          />
+          <TextInformation
+            title="Service"
+            :value="transaction?.ongkir_detail?.service_name"
+          />
+          <TextInformation
+            title="Price"
+            :value="transaction?.ongkir_detail?.price"
+          />
+          <TextInformation
+            title="Estimasi"
+            :value="`${transaction?.ongkir_detail?.estimasi} Hari`"
+          />
         </section>
       </section>
+      <div class="flex justify-end">
+        <Button
+          text="Save Now"
+          @click="editStatusProduct"
+          :disabled="status_product === transaction?.status"
+        />
+      </div>
     </div>
   </Layout>
 </template>
@@ -63,15 +108,55 @@
 import Layout from "../components/Layout/Dashboard.vue";
 import TextInformation from "@/components/organism/TransactionDetail/TextInformation.vue";
 import Select from "@/components/element/Select.vue";
+import {
+  getDetailTransactionAPI,
+  editStatusProductAPI,
+} from "@/actions/transaction";
+import checkValidateToken from "@/utils/checkValidateToken";
+import { useToast } from "vue-toastification";
+import Button from "@/components/element/Button.vue";
 
 export default {
   name: "TransactionDetail",
   data() {
     return {
       options: ["Pending", "Telah diserahkan kurir", "Cancel"],
+      transaction: {},
+      status_product: "Pending",
     };
   },
-  components: { Layout, TextInformation, Select },
+  components: { Layout, TextInformation, Select, Button },
+  setup() {
+    const toast = useToast();
+    return { toast };
+  },
+  methods: {
+    async editStatusProduct() {
+      const { token } = this.$store.state;
+      const { id } = this.$route.params;
+      const response = await editStatusProductAPI(
+        token,
+        id,
+        this.status_product
+      );
+      checkValidateToken(response, this.toast, this.$router);
+      if (response.status === 200) {
+        this.$router.push("/transactions");
+      }
+    },
+  },
+  mounted() {
+    const getTransactionDetail = async () => {
+      const { id } = this.$route.params;
+      const { token } = this.$store.state;
+      const response = await getDetailTransactionAPI(token, id);
+      checkValidateToken(response, this.toast, this.$route);
+      this.transaction = response?.data;
+      this.status_product = response?.data?.status;
+      console.log(response.data);
+    };
+    getTransactionDetail();
+  },
 };
 </script>
 
