@@ -14,7 +14,21 @@ export const getProductPurchaseAPI = async (token) => {
 };
 export const getDetailTransactionAPI = async (token, id) => {
   try {
-    const options = optionsAxios("put", token, {}, `/transaction/${id}`);
+    const options = optionsAxios("get", token, {}, `/transaction/${id}`);
+    const response = await axios(options);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+export const editStatusProductAPI = async (token, id, status) => {
+  try {
+    const options = optionsAxios(
+      "put",
+      token,
+      {},
+      `/transaction/${id}?status=${status}`
+    );
     const response = await axios(options);
     return response;
   } catch (error) {
