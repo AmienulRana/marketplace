@@ -3,7 +3,10 @@
     title="Detail Transactions"
     text="Big result start from the small one"
   >
-    <div class="bg-white rounded-lg h-auto w-full p-10 relative">
+    <div
+      class="bg-white rounded-lg h-auto w-full p-10 relative"
+      v-if="!loading"
+    >
       <section class="md:grid-cols-3 md:gap-3 grid grid-cols-1 md:mb-7">
         <section class="w-56 h-56">
           <img
@@ -65,12 +68,28 @@
             :value="transaction?.address_user?.full_address"
           />
           <div class="mb-6">
-            <p class="text-sm mb-2 text-grey-600">Status</p>
-            <Select
-              :options="options"
-              class="md:w-1/2"
-              :modelValue="status_product"
-              @update:modelValue="(new_status) => (status_product = new_status)"
+            <template
+              v-if="preview_by === 'store' && transaction?.status !== 'Selesai'"
+            >
+              <p class="text-sm mb-2 text-grey-600">Status</p>
+              <Select
+                :options="options"
+                class="md:w-1/2"
+                :modelValue="status_product"
+                @update:modelValue="
+                  (new_status) => (status_product = new_status)
+                "
+              />
+            </template>
+            <!-- <TextInformation
+              v-else-if="preview_by === 'store' && transaction?.status !== 'Selesai'"
+              title="Status"
+              :value="transaction?.status"
+            /> -->
+            <TextInformation
+              v-else
+              title="Status"
+              :value="transaction?.status"
             />
           </div>
         </section>
@@ -98,10 +117,22 @@
       </section>
       <div class="flex justify-end">
         <Button
+          v-if="preview_by === 'store'"
           text="Save Now"
           @click="editStatusProduct"
-          :disabled="status_product === transaction?.status"
+          :disabled="
+            status_product === transaction?.status ||
+            transaction?.status === 'Telah diserahkan kurir'
+          "
         />
+        <template v-else-if="preview_by === 'user'">
+          <Button
+            v-if="transaction?.status !== 'Selesai'"
+            text="Paket sudah diterima"
+            @click="editStatusProduct('Selesai')"
+            :disabled="transaction?.status === ('Pending' || 'Cancel')"
+          />
+        </template>
       </div>
     </div>
   </Layout>
@@ -126,8 +157,10 @@ export default {
     return {
       urlImgServer: CONFIG.URL_IMAGES,
       options: ["Pending", "Telah diserahkan kurir", "Cancel"],
+      loading: true,
       transaction: {},
-      status_product: "Pending",
+      status_product: "",
+      preview_by: "",
     };
   },
   components: { Layout, TextInformation, Select, Button },
@@ -136,13 +169,13 @@ export default {
     return { toast };
   },
   methods: {
-    async editStatusProduct() {
+    async editStatusProduct(status) {
       const { token } = this.$store.state;
       const { id } = this.$route.params;
       const response = await editStatusProductAPI(
         token,
         id,
-        this.status_product
+        status ? status : this.status_product
       );
       checkValidateToken(response, this.toast, this.$router);
       if (response.status === 200) {
@@ -151,6 +184,7 @@ export default {
     },
   },
   mounted() {
+    const { by } = this.$route.query;
     const getTransactionDetail = async () => {
       const { id } = this.$route.params;
       const { token } = this.$store.state;
@@ -158,7 +192,8 @@ export default {
       checkValidateToken(response, this.toast, this.$route);
       this.transaction = response?.data;
       this.status_product = response?.data?.status;
-      console.log(response.data);
+      this.preview_by = by;
+      this.loading = false;
     };
     getTransactionDetail();
   },
