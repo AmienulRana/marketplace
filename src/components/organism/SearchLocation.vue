@@ -53,7 +53,9 @@ export default {
   components: { Input, Loading },
   props: {
     label: String,
-    getLocationUser: Function,
+    getLocationUser: {
+      type: Function,
+    },
   },
   setup() {
     const toast = useToast();
@@ -86,7 +88,7 @@ export default {
       this.query = "";
       this.$store.commit("fillLocation", location);
       this.location = this.$store.state.location.nama_lokasi;
-      this.getLocationUser(location);
+      this.getLocationUser && this.getLocationUser(location);
     },
   },
   mounted() {
