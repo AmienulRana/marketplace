@@ -28,10 +28,10 @@ export default {
   computed: {
     buttonClass() {
       const { disabled, background } = this;
-      let classBtn = " ";
-      classBtn += background ? background : "bg-green-400 ";
-      classBtn += disabled ? "opacity-70 cursor-default" : "opacity-100 ";
-      return classBtn;
+
+      const bg = background ? background : "bg-green-400 ";
+      const dis = disabled ? "opacity-70 cursor-default" : "opacity-100 ";
+      return `${bg} ${dis}`;
     },
   },
 };
