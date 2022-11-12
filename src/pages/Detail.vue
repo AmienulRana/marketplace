@@ -61,7 +61,11 @@
 
           <p class="text-grey-600">
             Ongkos Kirim :
-            <VueNumberFormat :value="ongkir" disabled></VueNumberFormat>
+            <VueNumberFormat
+              :value="ongkir"
+              disabled
+              class="w-24"
+            ></VueNumberFormat>
           </p>
           <div class="flex mt-2.5">
             <Button
@@ -147,21 +151,19 @@ export default {
     changePreviewImg(img) {
       this.imagePreview = img;
     },
-    getLocationUser(location) {
-      console.log(location);
-    },
     async handleToCheckOngkir() {
+      this.loadingCheckOngkir = true;
       const data = {
         from: this.product?.store_id?.address?.lokasi_id,
         to: this.$store.state.location.lokasi_id,
         courier: "jne",
       };
       const response = await checkOngkirAPI(data);
-      console.log(response);
       if (response?.status > 300) {
         return;
       } else {
         this.ongkir = response;
+        this.loadingCheckOngkir = false;
       }
     },
     async addToCart(id) {
