@@ -8,7 +8,8 @@ export const checkOngkirAPI = async (data) => {
       ...data,
     });
     const expensivePrice = [];
-    const rangeOngkir = response?.data?.results[0]?.costs;
+    console.log(response)
+    const rangeOngkir = response?.data?.rajaongkir?.results[0]?.costs;
     rangeOngkir.map((range) =>
       range.cost.map((ongkir) => expensivePrice.push(ongkir.value))
     );
