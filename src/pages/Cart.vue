@@ -5,7 +5,7 @@
     </p>
     <section class="border-b-2 border-grey-500">
       <section
-        v-if="!carts.products"
+        v-if="carts?.products?.length === 0"
         class="flex flex-col items-center mt-6 mb-7"
       >
         <img src="@/assets/icons/empty-cart.svg" class="w-80" />
@@ -220,6 +220,7 @@ export default {
     const toast = useToast();
     const getMyCarts = async (data, store, router) => {
       const response = await getMyCartsAPI(store.state.token);
+      console.log(response);
       checkValidateToken(response, toast, router);
       if (response.status === 200) {
         data.carts = response?.data;
@@ -238,7 +239,7 @@ export default {
       };
       const response = await addToCartAPI(this.$store.state.token, data);
       checkValidateToken(response, this.toast, this.$router);
-      if (response.status === 200) {
+      if (response.status === 201) {
         this.getMyCarts(this, this.$store, this.$router);
       }
     },
