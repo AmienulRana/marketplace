@@ -40,17 +40,14 @@ export default {
   data() {
     return {
       firstname: "",
-      total_cart: 0,
+      total_cart: this.$store.state.total_cart,
     };
   },
   mounted() {
     const { fullname } = decodeJwtToken();
     this.firstname = fullname.split(" ")[0] || fullname;
-    const getTotalCart = async () => {
-      const response = await getMyCartsAPI(this.$store.state.token);
-      this.total_cart = response?.data?.products?.length || 0;
-    };
-    getTotalCart();
+    this.$store.dispatch("getTotalCart");
+    this.total_cart = this.$store.state.total_cart;
   },
 };
 </script>
