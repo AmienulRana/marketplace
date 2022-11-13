@@ -172,6 +172,10 @@ export default {
       };
       const response = await addToCartAPI(this.$store.state.token, data);
       checkValidateToken(response, this.toast, this.$router);
+      if (response.status === 200) {
+        this.$store.dispatch("getTotalCart");
+        this.total_cart = this.$store.state.total_cart;
+      }
     },
   },
 };
