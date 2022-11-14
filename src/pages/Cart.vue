@@ -229,7 +229,7 @@ export default {
       }
     },
     handleShowModal() {
-      if (!this.carts.products) {
+      if (this.carts.length === 0) {
         this.toast.error("Silahkan pilih product terlebih dahulu");
       } else if (!this.$store.state.location.lokasi_id) {
         this.toast.error("Silahkan isi Lokasi anda terlebih dahulu");
@@ -241,7 +241,7 @@ export default {
     async handleToCheckOngkir(courier = "jne") {
       this.loading = true;
       const data = {
-        from: this.carts?.store_detail?.address.lokasi_id,
+        from: this.carts[0]?.store_detail?.address.lokasi_id,
         to: this.$store.state.location.lokasi_id,
         courier,
       };
@@ -304,12 +304,14 @@ export default {
   },
   computed: {
     getTotalHarga() {
-      return this.getTotalProduct + this.ongkir_detail?.price;
+      return this.getTotalProduct[0] + this.ongkir_detail?.price;
     },
     getTotalProduct() {
-      return this.carts?.products?.reduce((total, product) => {
-        return total + product?.total_harga;
-      }, 0);
+      return this.carts.map((cart) =>
+        cart?.products?.reduce((total, product) => {
+          return total + product?.total_harga;
+        }, 0)
+      );
     },
   },
   mounted() {
