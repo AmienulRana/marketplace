@@ -5,7 +5,7 @@
     </p>
     <section class="border-b-2 border-grey-500">
       <section
-        v-if="carts?.products?.length === 0"
+        v-if="carts.length === 0"
         class="flex flex-col items-center mt-6 mb-7"
       >
         <img src="@/assets/icons/empty-cart.svg" class="w-80" />
@@ -13,45 +13,22 @@
           Opps! Keranjangmu masih kosong
         </h2>
       </section>
-      <section
-        class="flex mt-6 mb-7 w-full"
-        v-for="product in carts?.products"
-        :key="product._id"
-      >
-        <img
-          :src="`${urlImgServer}/${product?.thumbnail}`"
-          class="sm:w-40 sm:h-20 w-36 h-16 rounded-lg object-cover"
-        />
-        <div class="ml-3.5 overflow-hidden">
-          <h2 class="text-blue-500 truncate">
-            {{ product?.nama_product }}
-          </h2>
-          <p class="text-grey-600 text-sm my-1">
-            {{ carts?.store_detail?.nama_toko }}
-          </p>
-          <p class="text-grey-600 text-sm">
-            <VueNumberFormat
-              :value="product?.total_harga"
-              class="w-max bg-transparent"
-              disabled="true"
-            ></VueNumberFormat>
-          </p>
-          <div class="flex border-2 border-grey-500 w-max px-2 rounded-md mt-2">
-            <button
-              class="border-none bg-transparent w-7 text-grey-600"
-              @click="deleteFromCart(product?._id)"
-            >
-              <font-awesome-icon icon="minus" />
-            </button>
-            <p class="text-grey-600 mx-4">{{ product?.quantity }}</p>
-            <button
-              class="border-none bg-transparent w-7 text-grey-600"
-              @click="addToCart(product?._id)"
-            >
-              <font-awesome-icon icon="plus" />
-            </button>
-          </div>
-        </div>
+      <section class="mt-6 mb-7 w-full" v-for="cart in carts" :key="cart._id">
+        <p class="flex mb-4 text-grey-600 items-center truncate">
+          <font-awesome-icon icon="fa-solid fa-shop" class="mr-2" />
+          {{ cart?.store_detail?.nama_toko }}
+        </p>
+        <template v-for="product in cart?.products" :key="product._id">
+          <CardProduct
+            :nama_product="product?.nama_product"
+            :thumbnail="product?.thumbnail"
+            :quantity="product?.quantity"
+            :_id="product?._id"
+            :total_harga="product?.total_harga"
+            :addToCart="addToCart"
+            :deleteFromCart="deleteFromCart"
+          />
+        </template>
       </section>
     </section>
     <section class="mt-7 mb-12 pb-4 border-b-2 border-grey-500">
@@ -181,6 +158,7 @@ import Button from "@/components/element/Button.vue";
 import Modal from "@/components/element/Modal.vue";
 import RowOngkir from "@/components/organism/Cart/RowOngkir.vue";
 import Loading from "@/components/element/Loading.vue";
+import CardProduct from "@/components/organism/Cart/CardProduct.vue";
 
 export default {
   name: "Cart",
@@ -193,11 +171,12 @@ export default {
     Modal,
     RowOngkir,
     Loading,
+    CardProduct,
   },
   data() {
     return {
       urlImgServer: CONFIG.URL_IMAGES,
-      carts: {},
+      carts: [],
       showModal: false,
       loading: true,
       ongkirs: [],
@@ -224,6 +203,7 @@ export default {
       checkValidateToken(response, toast, router);
       if (response.status === 200) {
         data.carts = response?.data;
+        console.log(response.data);
       }
     };
     return { toast, getMyCarts };
