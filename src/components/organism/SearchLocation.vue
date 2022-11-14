@@ -66,7 +66,7 @@ export default {
       query: "",
       locations: [],
       locationsPrediction: [],
-      location: "",
+      location: this.$store.state.location.nama_lokasi,
     };
   },
   methods: {
