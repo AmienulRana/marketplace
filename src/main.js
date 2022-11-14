@@ -7,6 +7,7 @@ import {
   faLocationDot,
   faMinus,
   faPlus,
+  faShop,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Toast from "vue-toastification";
@@ -15,7 +16,7 @@ import "vue-toastification/dist/index.css";
 import VueNumberFormat from "vue-number-format";
 import store from "./store";
 
-library.add(faMinus, faPlus, faLocationDot);
+library.add(faMinus, faPlus, faLocationDot, faShop);
 
 createApp(App)
   .use(router)
