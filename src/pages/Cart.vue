@@ -199,11 +199,9 @@ export default {
     const toast = useToast();
     const getMyCarts = async (data, store, router) => {
       const response = await getMyCartsAPI(store.state.token);
-      console.log(response);
       checkValidateToken(response, toast, router);
       if (response.status === 200) {
         data.carts = response?.data;
-        console.log(response.data);
       }
     };
     return { toast, getMyCarts };
