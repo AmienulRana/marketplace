@@ -172,11 +172,9 @@ export default {
     async editStatusProduct(status) {
       const { token } = this.$store.state;
       const { id } = this.$route.params;
-      const response = await editStatusProductAPI(
-        token,
-        id,
-        status ? status : this.status_product
-      );
+      const conditionStatus =
+        status === "Selesai" ? status : this.status_product;
+      const response = await editStatusProductAPI(token, id, conditionStatus);
       checkValidateToken(response, this.toast, this.$router);
       if (response.status === 200) {
         this.$router.push("/transactions");
