@@ -32,7 +32,7 @@
           >
             {{ name }}
           </p>
-          <HamburgerButton @click="handleShowSidebar" />
+          <HamburgerButton @click="handleShowSidebar" class="ml-4 lg:hidden" />
         </div>
       </section>
       <slot />
