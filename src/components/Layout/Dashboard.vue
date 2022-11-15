@@ -18,33 +18,20 @@
           <p class="text-grey-600">{{ text }}</p>
         </div>
         <div class="flex items-center">
-          <img
-            src="../../assets/image/review1.jpg"
-            class="w-11 h-11 rounded-full mr-3"
-          />
-          <!-- <div class="relative">
-            <router-link to="/transaction">
-              <img src="../../assets/icons/shopping.svg" class="ml-4" />
-              <p
-                class="
-                  absolute
-                  top-3
-                  -right-2
-                  bg-green-500
-                  w-4
-                  h-4
-                  rounded-full
-                  flex
-                  items-center
-                  justify-center
-                  p-2
-                  text-white
-                "
-              >
-                3
-              </p>
-            </router-link>
-          </div> -->
+          <p
+            class="
+              text-white text-xl
+              bg-green-500
+              w-10
+              h-10
+              flex
+              items-center
+              justify-center
+              rounded-full
+            "
+          >
+            {{ name }}
+          </p>
           <HamburgerButton @click="handleShowSidebar" />
         </div>
       </section>
@@ -56,6 +43,8 @@
 <script>
 import Sidebar from "../element/Sidebar.vue";
 import HamburgerButton from "../element/Navbar/HamburgerButton.vue";
+import decodeJwtToken from "@/utils/jwtDecode";
+
 export default {
   name: "DashboardLayout",
   components: { Sidebar, HamburgerButton },
@@ -64,12 +53,17 @@ export default {
   data() {
     return {
       showSidebar: false,
+      name: "",
     };
   },
   methods: {
     handleShowSidebar() {
       this.showSidebar = this.showSidebar ? false : true;
     },
+  },
+  mounted() {
+    const { fullname } = decodeJwtToken();
+    this.name = fullname.split("")[0];
   },
 };
 </script>
