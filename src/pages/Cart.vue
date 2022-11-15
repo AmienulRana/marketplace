@@ -224,7 +224,10 @@ export default {
     async deleteFromCart(id) {
       const response = await deleteMyCartsAPI(this.$store.state.token, id);
       checkValidateToken(response, this.toast, this.$router);
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.message) {
+        this.$store.dispatch("getTotalCart");
+        this.getMyCarts(this, this.$store, this.$router);
+      } else {
         this.getMyCarts(this, this.$store, this.$router);
       }
     },
@@ -270,7 +273,7 @@ export default {
       const { lokasi_id } = this.$store.state.location;
       const { mobile_phone, full_address } = this.address;
       const { price, courier } = this.ongkir_detail;
-      if (!this.carts || this.carts.products.length === 0) {
+      if (!this.carts || this.carts.length === 0) {
         this.toast.error("Tidak ada barang dikeranjang anda!");
         return false;
       } else if (!lokasi_id || !mobile_phone || !full_address) {
@@ -293,25 +296,28 @@ export default {
           store_detail: carts.store_detail,
           ongkir_detail,
           address: { ...address, nama_lokasi },
-          products: carts?.products,
+          carts,
         });
         checkValidateToken(response, this.toast, this.$router);
         if (response.status === 200) {
           this.$router.push({ name: "index" });
+          this.$store.dispatch("getTotalCart");
         }
       }
     },
   },
   computed: {
     getTotalHarga() {
-      return this.getTotalProduct[0] + this.ongkir_detail?.price;
+      return this.getTotalProduct + this.ongkir_detail?.price;
     },
     getTotalProduct() {
-      return this.carts.map((cart) =>
-        cart?.products?.reduce((total, product) => {
-          return total + product?.total_harga;
-        }, 0)
-      );
+      return this.carts
+        .map((cart) =>
+          cart?.products?.reduce((total, product) => {
+            return total + product?.total_harga;
+          }, 0)
+        )
+        .reduce((total, harga) => total + harga, 0);
     },
   },
   mounted() {
