@@ -25,7 +25,7 @@
           :thumbnail="`${urlImgServer}/${transaction?.product?.thumbnail}`"
           :name_product="transaction?.product?.nama_product"
           :customer_name="transaction?.user_id?.fullname"
-          :date="transaction?.createdAt"
+          :status="transaction?.status"
         />
       </router-link>
     </template>
@@ -64,6 +64,7 @@ export default {
         data.$store.state.token,
         `?by=${data.get_transaction_by}`
       );
+      console.log(response.data);
       data.transactions = response?.data;
       checkValidateToken(response, toast, data.$router);
     };
