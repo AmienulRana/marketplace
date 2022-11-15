@@ -47,7 +47,6 @@ export default {
     const { fullname } = decodeJwtToken();
     this.firstname = fullname.split(" ")[0] || fullname;
     this.$store.dispatch("getTotalCart");
-    this.total_cart = this.$store.state.total_cart;
   },
 };
 </script>
