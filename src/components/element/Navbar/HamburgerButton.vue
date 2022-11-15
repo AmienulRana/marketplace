@@ -1,21 +1,11 @@
 <template>
-  <div class="relative w-8 block h-14 md:hidden md:invisible">
+  <div class="relative w-8 block h-14">
     <input
       class="z-20 opacity-0 absolute block h-8 w-full top-5 left-0 pointer"
       type="checkbox"
     />
     <div
-      class="
-        block
-        w-8
-        h-6
-        z-10
-        absolute
-        flex flex-col
-        justify-between
-        top-4
-        left-0
-      "
+      class="w-8 h-6 z-10 absolute flex flex-col justify-between top-4 left-0"
     >
       <span
         class="
