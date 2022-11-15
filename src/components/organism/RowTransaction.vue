@@ -5,7 +5,7 @@
       <h2 class="md:w-72 truncate w-48">{{ name_product }}</h2>
     </div>
     <p>{{ customer_name }}</p>
-    <p>{{ status }}</p>
+    <p :class="classForStatus">{{ status }}</p>
     <img src="../../assets/icons/arrow-right.svg" />
   </div>
 </template>
@@ -18,6 +18,20 @@ export default {
     name_product: { type: String },
     customer_name: { type: String },
     status: { type: String },
+  },
+  computed: {
+    classForStatus() {
+      switch (this.status) {
+        case "Selesai":
+          return "text-green-500";
+        case "Pending":
+          return "text-red-500";
+        case "Cancel":
+          return "text-red-500";
+        default:
+          return "text-yellow-500";
+      }
+    },
   },
 };
 </script>
