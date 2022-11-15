@@ -23,7 +23,7 @@ const store = createStore({
   actions:{
     async getTotalCart(context){
       const response = await getMyCartsAPI(this.state.token); 
-      return context.commit('setTotalCart', response?.data?.products?.length || 0);
+      return context.commit('setTotalCart', response?.data?.length || 0);
     }
   },
   modules: {
