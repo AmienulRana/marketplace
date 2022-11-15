@@ -64,7 +64,6 @@ export default {
         data.$store.state.token,
         `?by=${data.get_transaction_by}`
       );
-      console.log(response.data);
       data.transactions = response?.data;
       checkValidateToken(response, toast, data.$router);
     };
