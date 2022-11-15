@@ -5,7 +5,7 @@
       <h2 class="md:w-72 truncate w-48">{{ name_product }}</h2>
     </div>
     <p>{{ customer_name }}</p>
-    <p>{{ new Date(date).toLocaleDateString() }}</p>
+    <p>{{ status }}</p>
     <img src="../../assets/icons/arrow-right.svg" />
   </div>
 </template>
@@ -17,7 +17,7 @@ export default {
     thumbnail: { type: String },
     name_product: { type: String },
     customer_name: { type: String },
-    date: { type: String },
+    status: { type: String },
   },
 };
 </script>
