@@ -46,6 +46,7 @@
 import axios from "axios";
 import { useToast } from "vue-toastification";
 import Input from "../element/Input.vue";
+import { MODE } from "@/config";
 import Loading from "../element/Loading.vue";
 
 export default {
@@ -94,9 +95,11 @@ export default {
   mounted() {
     const getLocation = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:4000/api/v1/location"
-        );
+        const URL_API =
+          MODE === "dev"
+            ? "http://localhost:4000"
+            : "https://locations-eight.vercel.app";
+        const response = await axios.get(`${URL_API}/api/v1/location`);
         this.locations = response?.data;
       } catch (err) {
         this.toast.error("Gagal mengambil Lokasi, silahkan hubungi developer");
