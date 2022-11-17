@@ -1,4 +1,4 @@
-const MODE = 'prod';
+export const MODE = 'prod';
 
 const URL = MODE === 'dev' ? "http://localhost:5000/api/v1" : 'https://api-marteplace.vercel.app/api/v1'
 
