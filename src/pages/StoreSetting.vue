@@ -102,7 +102,7 @@ import Input from "../components/element/Input.vue";
 import Select from "../components/element/Select.vue";
 import Radio from "../components/element/Radio.vue";
 import Button from "../components/element/Button.vue";
-import CONFIG from "../config";
+import CONFIG, { MODE } from "../config";
 import Loading from "../components/element/Loading.vue";
 import checkValidateToken from "../utils/checkValidateToken.js";
 import { getMyStoreAPI, editMyStoreAPI } from "../actions/storeSetting.js";
@@ -210,9 +210,11 @@ export default {
     getMyStore();
     const getLocation = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:4000/api/v1/location"
-        );
+        const URL_API =
+          MODE === "dev"
+            ? "http://localhost:4000"
+            : "https://locations-eight.vercel.app";
+        const response = await axios.get(`${URL_API}/api/v1/location`);
         this.locations = response.data;
       } catch (err) {
         this.toast.error("Gagal mengambil Lokasi, silahkan hubungi developer");
