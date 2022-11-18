@@ -36,13 +36,14 @@ import { getProductAPI } from "../actions/products";
 import checkValidateToken from "../utils/checkValidateToken";
 import { useToast } from "vue-toastification";
 import Loading from "../components/element/Loading.vue";
+import CONFIG from "@/config";
 
 export default {
   name: "MyProduct",
   data() {
     return {
       loading: true,
-      url_image: "http://localhost:5000/images",
+      url_image: CONFIG.URL_IMAGES,
       products: [],
     };
   },
