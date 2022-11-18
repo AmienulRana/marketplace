@@ -61,7 +61,12 @@
             <p class="text-red-500">{{ image.error }}</p>
           </div>
         </div>
-        <Button text="Create Product" class="mt-5 w-full" type="sumbit" />
+        <Button
+          text="Create Product"
+          class="mt-5 w-full"
+          type="sumbit"
+          :disabled="loading"
+        />
       </form>
     </section>
   </Layout>
@@ -84,6 +89,7 @@ export default {
   components: { Layout, Input, Select, Radio, Button, Textarea },
   data() {
     return {
+      loading: false,
       product_name: "",
       price: 0,
       description: "",
@@ -99,6 +105,7 @@ export default {
   },
   methods: {
     async handleToAddProduct() {
+      this.loading = true;
       const fd = new FormData();
       this.images.map((image) => fd.append("images", image.originalFile));
       fd.append("nama_product", this.product_name);
@@ -110,7 +117,9 @@ export default {
       const response = await addProductAPI(fd, {
         token: this.$store.state.token,
       });
+      console.log(response);
       checkValidateToken(response, this.toast, this.$router);
+      this.loading = false;
       if (response.status === 200) {
         this.$router.push("/my-products");
       }
